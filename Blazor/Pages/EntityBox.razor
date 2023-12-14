@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Components.Web;
+@using Blazor.Data
+
+<div style="
+width:100px; 
+display: inline-block; 
+border: 1px solid black; 
+position: absolute; 
+top:@Y; left: @X;
+background-color: lightgray"
+     @ref="element">
+    <h5 style="
+    text-align: center; 
+    width: 100%; 
+    background-color: darkcyan; 
+    cursor: pointer; 
+    border-bottom: 1px solid black; 
+    user-select: none;
+    padding: 10px"
+        @onmousedown="(e) => StartDrag(e)"
+        @onmouseup="StopDrag"
+        @onmouseleave="StopDrag"
+        @onmousemove="(e) => DragEntity(e)">
+        @Data.Name
+    </h5>
+    @foreach (string attr in Data.Attributes)
+    {
+        <div style="padding-left: 10px">attr</div>
+    }
+</div>
+
+@code {
+    [Parameter] public EntityData Data { get; set; }
+    private int x = 100;
+    private int y = 100;
+    private string X => x + "px";
+    private string Y => y + "px";
+    private ElementReference element;
+    private bool isDragging;
+    private double xOffset;
+
+    protected override void OnInitialized()
+    {
+        x = Data.Xstart;
+        y = Data.Ystart;
+    }
+
+    private void StartDrag(MouseEventArgs e)
+    {
+        xOffset = e.ClientX;
+        isDragging = true;
+        Console.WriteLine(e.ClientX);
+        Console.WriteLine("offset click: " + (e.ClientX - x));
+        Console.WriteLine("offset click: " + (e.ClientY - y));
+    }
+
+    private void StopDrag()
+    {
+        if (!isDragging) return;
+        Console.WriteLine("Stop");
+        isDragging = false;
+    }
+
+    private void DragEntity(MouseEventArgs e)
+    {
+        if (!isDragging) return;
+
+        y = (int)e.ClientY - 30; // hvorfor 20?
+        x = (int)(e.ClientX - 770); // hvorfor 770?
+    }
+
+}

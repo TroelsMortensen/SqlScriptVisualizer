@@ -1,0 +1,56 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web;
+@using Blazor.Data
+@inject EntityManager EntityManager
+@inject SqliteParser SqliteParser
+
+<div style="height: 100vh; width: 100%; display: flex">
+    <div style="height:100%; width: 80ch; display: flex; flex-flow: column">
+        <div style="width:100%; flex:  0 1 40px">
+            <button @onclick="GenerateDiagram">Generate ></button>
+        </div>
+        <textarea style="height: 95%; width: 100%; flex: 1 1 auto; resize: none" @bind="sql">
+
+        </textarea>
+    </div>
+    <div style="height:100%; flex: 1">
+        <div style="height:100%; width: 100%; background-color: red; border: 10px solid black; position: absolute"
+             @onclick="(e) => PrintCoords(e)">
+            @foreach (EntityData entity in EntityManager.Entities)
+            {
+                <EntityBox Data="entity"></EntityBox>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    private string sql = @"CREATE TABLE ""TvShows"" (
+    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_TvShows"" PRIMARY KEY AUTOINCREMENT,
+    ""Title"" TEXT NOT NULL,
+    ""Year"" INTEGER NOT NULL,
+    ""Genre"" TEXT NOT NULL
+);
+
+CREATE TABLE ""Episodes"" (
+    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Episodes"" PRIMARY KEY AUTOINCREMENT,
+    ""Title"" TEXT NOT NULL,
+    ""Runtime"" INTEGER NOT NULL,
+    ""SeasonId"" TEXT NOT NULL,
+    ""TvShowId"" INTEGER NOT NULL,
+    CONSTRAINT ""FK_Episodes_TvShows_TvShowId"" FOREIGN KEY (""TvShowId"") REFERENCES ""TvShows"" (""Id"") ON DELETE CASCADE
+);";
+
+    private void PrintCoords(MouseEventArgs e)
+    {
+        Console.WriteLine($"Board click pos: ({e.ClientX}, {e.ClientY})");
+    }
+
+    private void GenerateDiagram()
+    {
+        // Console.WriteLine(sql);
+        SqliteParser.SqliteToEntities(sql);
+    }
+}
