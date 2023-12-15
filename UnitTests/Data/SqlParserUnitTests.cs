@@ -87,7 +87,7 @@ public class SqlParserUnitTests
         string fkAttrName = SqliteParser.ExtractFkAttributeName(input);
         Assert.Equal("tvshowid", fkAttrName);
     }
-    
+
     private const string twoTablesScript = @"CREATE TABLE ""TvShows"" (
     ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_TvShows"" PRIMARY KEY AUTOINCREMENT,
     ""Title"" TEXT NOT NULL,
