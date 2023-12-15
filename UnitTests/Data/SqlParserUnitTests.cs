@@ -52,6 +52,13 @@ public class SqlParserUnitTests
         Assert.True(entities.First().Attributes.First().IsPrimaryKey);
         Assert.True(entities[1].Attributes.First().IsPrimaryKey);
     }
+
+    [Fact]
+    public void OnlyOnePrimaryKeyPerTableWithoutCompositeKey()
+    {
+        Assert.Equal(1, entities[0].Attributes.Count(attribute => attribute.IsPrimaryKey));
+        Assert.Equal(1, entities[1].Attributes.Count(attribute => attribute.IsPrimaryKey));
+    }
     
     private const string twoTablesScript = @"CREATE TABLE ""TvShows"" (
     ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_TvShows"" PRIMARY KEY AUTOINCREMENT,

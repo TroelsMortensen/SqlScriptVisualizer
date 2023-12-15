@@ -7,24 +7,24 @@ public class SqliteParser
 {
     private bool isInTable = false;
     List<Entity> result = new();
+    Entity entity = null!;
 
     public List<Entity> SqlScriptToEntities(string sql)
     {
         string[] strings = sql.Split("\n");
-        Entity entity = null!;
         foreach (var line in strings)
         {
-            HandleEndOfTable(line, result, entity);
+            HandleEndOfTable(line);
 
-            HandleAttribute(line, entity);
+            AddAttribute(line);
 
-            entity = HandleStartOfTable(line, entity);
+            HandleStartOfTable(line);
         }
 
         return result;
     }
 
-    private Entity HandleStartOfTable(string line, Entity entity)
+    private void HandleStartOfTable(string line)
     {
         if (IsStartOfTable(line))
         {
@@ -34,20 +34,25 @@ public class SqliteParser
             entity.Name = entityName;
         }
 
-        return entity;
     }
 
-    private void HandleAttribute(string line, Entity entity)
+    private void AddAttribute(string line)
     {
         if (IsAttributeLine(line))
         {
             Attribute attr = new();
             attr.Name = ExtractAttributeName(line);
+            attr.IsPrimaryKey = ComputeIsPrimaryKey(line);
             entity.Attributes.Add(attr);
         }
     }
 
-    private void HandleEndOfTable(string line, List<Entity> result, Entity entity)
+    private bool ComputeIsPrimaryKey(string line)
+    {
+        return line.Contains("primary key", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void HandleEndOfTable(string line)
     {
         if (IsEndOfTable(line))
         {
