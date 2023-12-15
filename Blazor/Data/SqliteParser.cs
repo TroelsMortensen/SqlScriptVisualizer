@@ -36,13 +36,13 @@ public class SqliteParser
 
         string attrName = ExtractFkAttributeName(line);
         ForeignKey fk = CreateForeignKey(line);
-        Attribute attribute = FindAttributeFromName(attrName);
-        attribute.ForeignKeys.Add(fk);
+        AddForeignKeyToAttribute(attrName, fk);
     }
 
-    private Attribute FindAttributeFromName(string attrName)
+    private void AddForeignKeyToAttribute(string attrName, ForeignKey fk)
     {
-        return entity.Attributes.Single(attr => attr.Name.Equals(attrName));
+        Attribute attribute = entity.Attributes.Single(attr => attr.Name.Equals(attrName));
+        attribute.ForeignKeys.Add(fk);
     }
 
     public static string ExtractFkAttributeName(string line)
@@ -79,8 +79,7 @@ public class SqliteParser
 
         isInTable = true;
         entity = new();
-        string entityName = ExtractEntityName(line);
-        entity.Name = entityName;
+        AddEntityNameToEntity(line);
     }
 
     private void HandleAttribute(string line)
@@ -123,9 +122,9 @@ public class SqliteParser
         return line.Trim().Split(" ").First().Replace("\"", "");
     }
 
-    private static string ExtractEntityName(string line)
+    private  void AddEntityNameToEntity(string line)
     {
-        return line.Replace("CREATE TABLE", "").Replace("\"", "").Replace("(", "").Trim();
+        entity.Name = line.Replace("CREATE TABLE", "").Replace("\"", "").Replace("(", "").Trim();
     }
 
     private bool IsEndOfTable(string line)
