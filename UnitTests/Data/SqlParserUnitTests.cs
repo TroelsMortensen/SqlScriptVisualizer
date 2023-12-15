@@ -6,27 +6,53 @@ namespace UnitTests.Data;
 public class SqlParserUnitTests
 {
     private readonly SqliteParser parser;
-
+    private readonly List<Entity> entities;
     public SqlParserUnitTests()
     {
         parser = new SqliteParser();
+        entities = parser.SqlScriptToEntities(twoTablesScript);
+
     }
 
     [Fact]
-    public void Parse_ReturnsTwoEntities_GivenTwoTables()
+    public void ReturnsTwoEntities()
     {
-        List<Entity> entities = parser.SqlScriptToEntities(twoTablesScript);
-        
         Assert.Equal(2, entities.Count);
         Assert.Equal("TvShows",entities.First().Name);
         Assert.Equal("Episodes",entities[1].Name);
     }
 
     [Fact]
-    public void Parse_EntitiesContainsAttributes_GivenTwoTablesWithAttributes()
+    public void EntitiesContainsAttributes()
     {
+
+        Assert.Equal(4, entities.First().Attributes.Count);
+        Assert.Equal(5, entities[1].Attributes.Count);
     }
 
+    [Fact]
+    public void AttributesHaveCorrectName()
+    {
+        
+        Assert.Equal("Id", entities[0].Attributes[0].Name);
+        Assert.Equal("Title", entities[0].Attributes[1].Name);
+        Assert.Equal("Year", entities[0].Attributes[2].Name);
+        Assert.Equal("Genre", entities[0].Attributes[3].Name);
+        
+        Assert.Equal("Id", entities[1].Attributes[0].Name);
+        Assert.Equal("Title", entities[1].Attributes[1].Name);
+        Assert.Equal("Runtime", entities[1].Attributes[2].Name);
+        Assert.Equal("SeasonId", entities[1].Attributes[3].Name);
+        Assert.Equal("TvShowId", entities[1].Attributes[4].Name);
+    }
+
+    [Fact]
+    public void PrimaryKeyAttributesAreMarkedCorrectly()
+    {
+        Assert.True(entities.First().Attributes.First().IsPrimaryKey);
+        Assert.True(entities[1].Attributes.First().IsPrimaryKey);
+    }
+    
     private const string twoTablesScript = @"CREATE TABLE ""TvShows"" (
     ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_TvShows"" PRIMARY KEY AUTOINCREMENT,
     ""Title"" TEXT NOT NULL,
