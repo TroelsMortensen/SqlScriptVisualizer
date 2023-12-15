@@ -1,4 +1,5 @@
-﻿using Blazor.Data;
+﻿using System.Text.RegularExpressions;
+using Blazor.Data;
 using Blazor.Data.Models;
 
 namespace UnitTests.Data;
@@ -7,25 +8,24 @@ public class SqlParserUnitTests
 {
     private readonly SqliteParser parser;
     private readonly List<Entity> entities;
+
     public SqlParserUnitTests()
     {
         parser = new SqliteParser();
         entities = parser.SqlScriptToEntities(twoTablesScript);
-
     }
 
     [Fact]
     public void ReturnsTwoEntities()
     {
         Assert.Equal(2, entities.Count);
-        Assert.Equal("TvShows",entities.First().Name);
-        Assert.Equal("Episodes",entities[1].Name);
+        Assert.Equal("TvShows", entities.First().Name);
+        Assert.Equal("Episodes", entities[1].Name);
     }
 
     [Fact]
     public void EntitiesContainsAttributes()
     {
-
         Assert.Equal(4, entities.First().Attributes.Count);
         Assert.Equal(5, entities[1].Attributes.Count);
     }
@@ -33,12 +33,11 @@ public class SqlParserUnitTests
     [Fact]
     public void AttributesHaveCorrectName()
     {
-        
         Assert.Equal("Id", entities[0].Attributes[0].Name);
         Assert.Equal("Title", entities[0].Attributes[1].Name);
         Assert.Equal("Year", entities[0].Attributes[2].Name);
         Assert.Equal("Genre", entities[0].Attributes[3].Name);
-        
+
         Assert.Equal("Id", entities[1].Attributes[0].Name);
         Assert.Equal("Title", entities[1].Attributes[1].Name);
         Assert.Equal("Runtime", entities[1].Attributes[2].Name);
@@ -58,6 +57,35 @@ public class SqlParserUnitTests
     {
         Assert.Equal(1, entities[0].Attributes.Count(attribute => attribute.IsPrimaryKey));
         Assert.Equal(1, entities[1].Attributes.Count(attribute => attribute.IsPrimaryKey));
+    }
+
+    [Fact]
+    public void ForeignKeyAddedToAttributes()
+    {
+        List<ForeignKey> foreignKeys = entities[1].Attributes.First(attribute => attribute.Name.Equals("TvShowId")).ForeignKeys;
+        Assert.Single(foreignKeys);
+        Assert.Equal("Id", foreignKeys.First().TargetAttributeName);
+        Assert.Equal("TvShows", foreignKeys.First().TargetTableName);
+    }
+
+    [Fact]
+    public void CanExtractFkTargetAttributeAndTableNamesWithRegEx()
+    {
+        string input =
+            @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
+        ForeignKey foreignKey = SqliteParser.CreateForeignKey(input);
+
+        Assert.Equal("tvshows", foreignKey.TargetTableName);
+        Assert.Equal("id", foreignKey.TargetAttributeName);
+    }
+
+    [Fact]
+    public void CanExtractFkAttributeNameWithRegEx()
+    {
+        string input =
+            @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
+        string fkAttrName = SqliteParser.ExtractFkAttributeName(input);
+        Assert.Equal("tvshowid", fkAttrName);
     }
     
     private const string twoTablesScript = @"CREATE TABLE ""TvShows"" (

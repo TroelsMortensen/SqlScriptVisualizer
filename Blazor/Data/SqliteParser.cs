@@ -1,4 +1,5 @@
-﻿using Blazor.Data.Models;
+﻿using System.Text.RegularExpressions;
+using Blazor.Data.Models;
 using Attribute = Blazor.Data.Models.Attribute;
 
 namespace Blazor.Data;
@@ -16,7 +17,9 @@ public class SqliteParser
         {
             HandleEndOfTable(line);
 
-            AddAttribute(line);
+            HandleAttribute(line);
+
+            AddForeignKey(line);
 
             HandleStartOfTable(line);
         }
@@ -24,41 +27,90 @@ public class SqliteParser
         return result;
     }
 
+    private void AddForeignKey(string line)
+    {
+        if (!line.Contains("foreign key", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        string attrName = ExtractFkAttributeName(line);
+        ForeignKey fk = CreateForeignKey(line);
+        Attribute attribute = FindAttributeFromName(attrName);
+        attribute.ForeignKeys.Add(fk);
+    }
+
+    private Attribute FindAttributeFromName(string attrName)
+    {
+        return entity.Attributes.Single(attr => attr.Name.Equals(attrName));
+    }
+
+    public static string ExtractFkAttributeName(string line)
+    {
+        string pattern = "foreign key \\(\"(\\w+)\"\\) references";
+        Regex r = new(pattern, RegexOptions.IgnoreCase);
+        Match match = r.Match(line);
+        GroupCollection groupCollection = match.Groups;
+        return groupCollection[1].Value;
+    }
+
+    public static ForeignKey CreateForeignKey(string line)
+    {
+        string pattern = "foreign key \\(\"(\\w+)\"\\) references \\\"(\\w+)\\\" \\(\\\"(\\w+)\\\"\\)";
+        Regex r = new(pattern, RegexOptions.IgnoreCase);
+        Match match = r.Match(line);
+        GroupCollection groupCollection = match.Groups;
+        string targetTable = groupCollection[2].Value;
+        string targetAttr = groupCollection[3].Value;
+        ForeignKey fk = new()
+        {
+            TargetAttributeName = targetAttr,
+            TargetTableName = targetTable
+        };
+        return fk;
+    }
+
     private void HandleStartOfTable(string line)
     {
-        if (IsStartOfTable(line))
+        if (!IsStartOfTable(line))
         {
-            isInTable = true;
-            entity = new();
-            string entityName = ExtractEntityName(line);
-            entity.Name = entityName;
+            return;
         }
 
+        isInTable = true;
+        entity = new();
+        string entityName = ExtractEntityName(line);
+        entity.Name = entityName;
     }
 
-    private void AddAttribute(string line)
+    private void HandleAttribute(string line)
     {
-        if (IsAttributeLine(line))
+        if (!IsAttributeLine(line))
         {
-            Attribute attr = new();
-            attr.Name = ExtractAttributeName(line);
-            attr.IsPrimaryKey = ComputeIsPrimaryKey(line);
-            entity.Attributes.Add(attr);
+            return;
         }
+
+        Attribute attr = new();
+        attr.Name = ExtractAttributeName(line);
+        attr.IsPrimaryKey = ComputeIsPrimaryKey(line);
+        entity.Attributes.Add(attr);
     }
 
-    private bool ComputeIsPrimaryKey(string line)
+
+    private static bool ComputeIsPrimaryKey(string line)
     {
         return line.Contains("primary key", StringComparison.OrdinalIgnoreCase);
     }
 
     private void HandleEndOfTable(string line)
     {
-        if (IsEndOfTable(line))
+        if (!IsEndOfTable(line))
         {
-            isInTable = false;
-            result.Add(entity);
+            return;
         }
+
+        isInTable = false;
+        result.Add(entity);
     }
 
     private bool IsAttributeLine(string line)
@@ -66,7 +118,7 @@ public class SqliteParser
         return isInTable && !line.Trim().StartsWith("constraint", StringComparison.OrdinalIgnoreCase);
     }
 
-    private string ExtractAttributeName(string line)
+    private static string ExtractAttributeName(string line)
     {
         return line.Trim().Split(" ").First().Replace("\"", "");
     }
