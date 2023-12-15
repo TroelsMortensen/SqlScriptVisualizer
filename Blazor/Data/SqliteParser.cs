@@ -2,9 +2,9 @@
 
 namespace Blazor.Data;
 
-public class SqliteParser(EntityManager entityManager)
+public class SqliteParser
 {
-    public void SqliteToEntities(string sql)
+    public List<List<Entity>> SqlScriptToEntities(string sql)
     {
         string[] strings = sql.Split("\n");
         Entity entity = null!;
@@ -18,5 +18,7 @@ public class SqliteParser(EntityManager entityManager)
                 
             }
         }
+
+        return [];
     }
 }
