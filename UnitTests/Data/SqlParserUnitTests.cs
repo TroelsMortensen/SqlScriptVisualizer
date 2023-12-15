@@ -1,13 +1,30 @@
 ﻿using Blazor.Data;
+using Blazor.Data.Models;
 
 namespace UnitTests.Data;
 
 public class SqlParserUnitTests
 {
+    private readonly SqliteParser parser;
+
+    public SqlParserUnitTests()
+    {
+        parser = new SqliteParser();
+    }
+
     [Fact]
     public void Parse_ReturnsTwoEntities_GivenTwoTables()
     {
-        SqliteParser parser = new();
+        List<Entity> entities = parser.SqlScriptToEntities(twoTablesScript);
+        
+        Assert.Equal(2, entities.Count);
+        Assert.Equal("TvShows",entities.First().Name);
+        Assert.Equal("Episodes",entities[1].Name);
+    }
+
+    [Fact]
+    public void Parse_EntitiesContainsAttributes_GivenTwoTablesWithAttributes()
+    {
     }
 
     private const string twoTablesScript = @"CREATE TABLE ""TvShows"" (

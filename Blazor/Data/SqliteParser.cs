@@ -4,21 +4,40 @@ namespace Blazor.Data;
 
 public class SqliteParser
 {
-    public List<List<Entity>> SqlScriptToEntities(string sql)
+    private bool isInTable = false;
+
+    public List<Entity> SqlScriptToEntities(string sql)
     {
+        List<Entity> result = new();
         string[] strings = sql.Split("\n");
         Entity entity = null!;
-        bool isInTable = false;
         foreach (var line in strings)
         {
-            if ("CREATE TABLE".Equals(line))
+            if (IsStartOfTable(line))
             {
+                isInTable = true;
                 entity = new();
-                string entityName = line.Replace("CREATE TABLE", "").Replace("\"", "").Trim();
-                
+                string entityName = line.Replace("CREATE TABLE", "").Replace("\"", "").Replace("(","").Trim();
+                entity.Name = entityName;
+            }
+
+            if (IsEndOfTable( line))
+            {
+                isInTable = false;
+                result.Add(entity);
             }
         }
 
-        return [];
+        return result;
+    }
+
+    private bool IsEndOfTable(string line)
+    {
+        return isInTable && line.Trim().Contains(");");
+    }
+
+    private bool IsStartOfTable(string line)
+    {
+        return line.Contains("CREATE TABLE") && !isInTable;
     }
 }
