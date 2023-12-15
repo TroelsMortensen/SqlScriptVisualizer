@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Web;
 @using Blazor.Data
+@using Blazor.ViewModels
 @inject EntityManager EntityManager
 @inject SqliteParser SqliteParser
 
@@ -16,9 +17,9 @@
     <div style="height:100%; flex: 1">
         <div style="height:100%; width: 100%; background-color: red; border: 10px solid black; position: absolute"
              @onclick="(e) => PrintCoords(e)">
-            @foreach (EntityData entity in EntityManager.Entities)
+            @foreach (EntityViewModel entity in EntityManager.Entities)
             {
-                <EntityBox Data="entity"></EntityBox>
+                <EntityBox EVM="entity"></EntityBox>
             }
         </div>
     </div>

@@ -1,6 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Web;
-@using Blazor.Data
-
+﻿@using Blazor.ViewModels
+@using Attribute = Blazor.Data.Models.Attribute
 <div style="
 width:100px; 
 display: inline-block; 
@@ -21,16 +20,16 @@ background-color: lightgray"
         @onmouseup="StopDrag"
         @onmouseleave="StopDrag"
         @onmousemove="(e) => DragEntity(e)">
-        @Data.Name
+        @EVM.Entity.Name
     </h5>
-    @foreach (string attr in Data.Attributes)
+    @foreach (Attribute attr in EVM.Entity.Attributes)
     {
-        <div style="padding-left: 10px">attr</div>
+        <div style="padding-left: 10px">@attr.Name</div>
     }
 </div>
 
 @code {
-    [Parameter] public EntityData Data { get; set; }
+    [Parameter] public EntityViewModel EVM { get; set; }
     private int x = 100;
     private int y = 100;
     private string X => x + "px";
@@ -41,8 +40,8 @@ background-color: lightgray"
 
     protected override void OnInitialized()
     {
-        x = Data.Xstart;
-        y = Data.Ystart;
+        x = EVM.Xstart;
+        y = EVM.Ystart;
     }
 
     private void StartDrag(MouseEventArgs e)

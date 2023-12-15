@@ -1,11 +1,10 @@
-﻿namespace Blazor.Data;
+﻿using Blazor.ViewModels;
+
+namespace Blazor.Data;
 
 public class EntityManager
 {
-    public List<EntityData> Entities { get; set; } = new();
+    public List<EntityViewModel> Entities { get; set; } = new();
 
-    public void AddEntity(EntityData entity)
-    {
-        Entities.Add(entity);
-    }
+
 }

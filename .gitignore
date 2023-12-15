@@ -1,2 +1,4 @@
 /Blazor/bin/
 /Blazor/obj/
+obj/
+bin/
