@@ -21,10 +21,35 @@ public class SqliteParser
 
             AddForeignKey(line);
 
+            AddCompositePrimaryKey(line);
+
             HandleStartOfTable(line);
         }
 
         return result;
+    }
+
+    private void AddCompositePrimaryKey(string line)
+    {
+        if (!line.Trim().StartsWith("constraint", StringComparison.OrdinalIgnoreCase) ||
+            !line.Contains("primary key", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        line = line.Remove(0, line.IndexOf('('))
+            .Replace("(", "")
+            .Replace("),", "")
+            .Replace("\r", "")
+            .Replace("\"", "");
+        string[] pkAttrNames = line.Split(",");
+        foreach (string name in pkAttrNames)
+        {
+            string trimmedName = name.Trim();
+            entity.Attributes
+                .Single(attr => attr.Name.Equals(trimmedName))
+                .IsPrimaryKey = true;
+        }
     }
 
     private void AddForeignKey(string line)
@@ -122,7 +147,7 @@ public class SqliteParser
         return line.Trim().Split(" ").First().Replace("\"", "");
     }
 
-    private  void AddEntityNameToEntity(string line)
+    private void AddEntityNameToEntity(string line)
     {
         entity.Name = line.Replace("CREATE TABLE", "").Replace("\"", "").Replace("(", "").Trim();
     }

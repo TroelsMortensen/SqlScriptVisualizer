@@ -1,4 +1,5 @@
-﻿using Blazor.Data;
+﻿using System.Collections;
+using Blazor.Data;
 using Blazor.Data.Models;
 using Attribute = Blazor.Data.Models.Attribute;
 
@@ -63,11 +64,28 @@ public class SqliteParser6TablesUnitTests
         yield return new object[] { i++, new List<string>(){"BooksId", "CategoriesName"} };
     }
     
-    [Fact]
-    public void PrimaryKeyAttributesAreMarkedCorrectly()
+    [Theory]
+    [MemberData(nameof(PrimaryKeyAttrs))]
+    public void PrimaryKeyAttributesAreMarkedCorrectly(int idx, List<string> pkAttrNames)
     {
-        // Assert.True(entities.First().Attributes.First().IsPrimaryKey);
-        // Assert.True(entities[1].Attributes.First().IsPrimaryKey);
+        bool allArePk = entities[idx]
+            .Attributes
+            .Where(attr => pkAttrNames.Contains(attr.Name))
+            .All(attr => attr.IsPrimaryKey);
+        
+        Assert.True(allArePk);
+    }
+
+    public static IEnumerable<object[]> PrimaryKeyAttrs()
+    {
+        int i = 0;
+        yield return new object[] { i++, new List<string>(){"Id"} };
+        yield return new object[] { i++, new List<string>(){"Id"} };
+        yield return new object[] { i++, new List<string>(){"Name"} };
+        yield return new object[] { i++, new List<string>(){"BookId", "AuthorId"} };
+        yield return new object[] { i++, new List<string>(){"Id"} };
+        yield return new object[] { i++, new List<string>(){"Id"} };
+        yield return new object[] { i++, new List<string>(){"BooksId", "CategoriesName"} };
     }
 
     [Fact]
