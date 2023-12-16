@@ -101,13 +101,22 @@ public class SqliteParser6TablesUnitTests
         Assert.Equal(count, entities[idx].Attributes.Count(attr => attr.IsPrimaryKey));
     }
 
+    // [Fact]
+    // public void MaxOneFkPerAttribute()
+    // {
+    //     IEnumerable<Attribute> allAttributes = entities.SelectMany(ent => ent.Attributes);
+    //     foreach (Attribute attribute in allAttributes)
+    //     {
+    //         Assert.True(attribute.ForeignKey.Count <= 1);
+    //     }
+    // }
+    
     [Fact]
     public void ForeignKeyAddedToAttributes()
     {
-        // List<ForeignKey> foreignKeys = entities[1].Attributes.First(attribute => attribute.Name.Equals("TvShowId")).ForeignKeys;
+        // Entity entity = entities[4]; // BookAuthor table
+        // List<ForeignKey> foreignKeys = entity.Attributes.Single(attr => attr.Name.Equals("BookId")).ForeignKeys;
         // Assert.Single(foreignKeys);
-        // Assert.Equal("Id", foreignKeys.First().TargetAttributeName);
-        // Assert.Equal("TvShows", foreignKeys.First().TargetTableName);
     }
 
     [Fact]

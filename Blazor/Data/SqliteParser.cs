@@ -81,7 +81,7 @@ public class SqliteParser
     private void AddForeignKeyToAttribute(string attrName, ForeignKey fk)
     {
         Attribute attribute = entity.Attributes.Single(attr => attr.Name.Equals(attrName));
-        attribute.ForeignKeys.Add(fk);
+        attribute.ForeignKey = fk;
     }
 
     public static string ExtractFkAttributeName(string line)

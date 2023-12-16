@@ -62,10 +62,10 @@ public class SqliteParser2TablesUnitTests
     [Fact]
     public void ForeignKeyAddedToAttributes()
     {
-        List<ForeignKey> foreignKeys = entities[1].Attributes.First(attribute => attribute.Name.Equals("TvShowId")).ForeignKeys;
-        Assert.Single(foreignKeys);
-        Assert.Equal("Id", foreignKeys.First().TargetAttributeName);
-        Assert.Equal("TvShows", foreignKeys.First().TargetTableName);
+        ForeignKey foreignKey = entities[1].Attributes.First(attribute => attribute.Name.Equals("TvShowId")).ForeignKey!;
+        // Assert.Single(foreignKey);
+        Assert.Equal("Id", foreignKey.TargetAttributeName);
+        Assert.Equal("TvShows", foreignKey.TargetTableName);
     }
 
     [Fact]
