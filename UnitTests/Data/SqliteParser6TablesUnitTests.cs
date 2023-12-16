@@ -116,26 +116,6 @@ public class SqliteParser6TablesUnitTests
         Assert.Equal(targetTableName, fk.TargetTableName);
     }
 
-    [Fact]
-    public void CanExtractFkTargetAttributeAndTableNamesWithRegEx()
-    {
-        // string input =
-        // @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
-        // ForeignKey foreignKey = SqliteParser.CreateForeignKey(input);
-
-        // Assert.Equal("tvshows", foreignKey.TargetTableName);
-        // Assert.Equal("id", foreignKey.TargetAttributeName);
-    }
-
-    [Fact]
-    public void CanExtractFkAttributeNameWithRegEx()
-    {
-        // string input =
-        // @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
-        // string fkAttrName = SqliteParser.ExtractFkAttributeName(input);
-        // Assert.Equal("tvshowid", fkAttrName);
-    }
-
 
     private const string SixTablesScript = @"CREATE TABLE ""Author"" (
     ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Author"" PRIMARY KEY AUTOINCREMENT,
