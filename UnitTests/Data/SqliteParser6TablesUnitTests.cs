@@ -31,13 +31,13 @@ public class SqliteParser6TablesUnitTests
     }
 
     [Theory]
-    [InlineData(0,2)]
-    [InlineData(1,5)]
-    [InlineData(2,1)]
-    [InlineData(3,3)]
-    [InlineData(4,4)]
-    [InlineData(5,5)]
-    [InlineData(6,2)]
+    [InlineData(0, 2)]
+    [InlineData(1, 5)]
+    [InlineData(2, 1)]
+    [InlineData(3, 3)]
+    [InlineData(4, 4)]
+    [InlineData(5, 5)]
+    [InlineData(6, 2)]
     public void EntitiesContainsAttributes(int idx, int count)
     {
         Assert.Equal(count, entities[idx].Attributes.Count);
@@ -55,15 +55,15 @@ public class SqliteParser6TablesUnitTests
     public static IEnumerable<object[]> AttributeNames()
     {
         int i = 0;
-        yield return new object[] { i++, new List<string>(){"Id", "Name"} };
-        yield return new object[] { i++, new List<string>(){"Id", "Title", "PublishDate", "Price", "Publisher"} };
-        yield return new object[] { i++, new List<string>(){"Name"} };
-        yield return new object[] { i++, new List<string>(){"BookId", "AuthorId", "Order"} };
-        yield return new object[] { i++, new List<string>(){"Id", "PromotionalPrice", "PromotionalText", "BookId"} };
-        yield return new object[] { i++, new List<string>(){"Id", "Rating", "VoterName", "Comment", "BookId"} };
-        yield return new object[] { i++, new List<string>(){"BooksId", "CategoriesName"} };
+        yield return new object[] { i++, new List<string>() { "Id", "Name" } };
+        yield return new object[] { i++, new List<string>() { "Id", "Title", "PublishDate", "Price", "Publisher" } };
+        yield return new object[] { i++, new List<string>() { "Name" } };
+        yield return new object[] { i++, new List<string>() { "BookId", "AuthorId", "Order" } };
+        yield return new object[] { i++, new List<string>() { "Id", "PromotionalPrice", "PromotionalText", "BookId" } };
+        yield return new object[] { i++, new List<string>() { "Id", "Rating", "VoterName", "Comment", "BookId" } };
+        yield return new object[] { i++, new List<string>() { "BooksId", "CategoriesName" } };
     }
-    
+
     [Theory]
     [MemberData(nameof(PrimaryKeyAttrs))]
     public void PrimaryKeyAttributesAreMarkedCorrectly(int idx, List<string> pkAttrNames)
@@ -72,27 +72,33 @@ public class SqliteParser6TablesUnitTests
             .Attributes
             .Where(attr => pkAttrNames.Contains(attr.Name))
             .All(attr => attr.IsPrimaryKey);
-        
+
         Assert.True(allArePk);
     }
 
     public static IEnumerable<object[]> PrimaryKeyAttrs()
     {
         int i = 0;
-        yield return new object[] { i++, new List<string>(){"Id"} };
-        yield return new object[] { i++, new List<string>(){"Id"} };
-        yield return new object[] { i++, new List<string>(){"Name"} };
-        yield return new object[] { i++, new List<string>(){"BookId", "AuthorId"} };
-        yield return new object[] { i++, new List<string>(){"Id"} };
-        yield return new object[] { i++, new List<string>(){"Id"} };
-        yield return new object[] { i++, new List<string>(){"BooksId", "CategoriesName"} };
+        yield return new object[] { i++, new List<string>() { "Id" } };
+        yield return new object[] { i++, new List<string>() { "Id" } };
+        yield return new object[] { i++, new List<string>() { "Name" } };
+        yield return new object[] { i++, new List<string>() { "BookId", "AuthorId" } };
+        yield return new object[] { i++, new List<string>() { "Id" } };
+        yield return new object[] { i++, new List<string>() { "Id" } };
+        yield return new object[] { i++, new List<string>() { "BooksId", "CategoriesName" } };
     }
 
-    [Fact]
-    public void OnlyOnePrimaryKeyPerTableWithoutCompositeKey()
+    [Theory]
+    [InlineData(0, 1)]
+    [InlineData(1, 1)]
+    [InlineData(2, 1)]
+    [InlineData(3, 2)]
+    [InlineData(4, 1)]
+    [InlineData(5, 1)]
+    [InlineData(6, 2)]
+    public void NumberOfPrimaryKeysAreCorrect(int idx, int count)
     {
-        // Assert.Equal(1, entities[0].Attributes.Count(attribute => attribute.IsPrimaryKey));
-        // Assert.Equal(1, entities[1].Attributes.Count(attribute => attribute.IsPrimaryKey));
+        Assert.Equal(count, entities[idx].Attributes.Count(attr => attr.IsPrimaryKey));
     }
 
     [Fact]
@@ -108,7 +114,7 @@ public class SqliteParser6TablesUnitTests
     public void CanExtractFkTargetAttributeAndTableNamesWithRegEx()
     {
         // string input =
-            // @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
+        // @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
         // ForeignKey foreignKey = SqliteParser.CreateForeignKey(input);
 
         // Assert.Equal("tvshows", foreignKey.TargetTableName);
@@ -119,7 +125,7 @@ public class SqliteParser6TablesUnitTests
     public void CanExtractFkAttributeNameWithRegEx()
     {
         // string input =
-            // @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
+        // @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
         // string fkAttrName = SqliteParser.ExtractFkAttributeName(input);
         // Assert.Equal("tvshowid", fkAttrName);
     }

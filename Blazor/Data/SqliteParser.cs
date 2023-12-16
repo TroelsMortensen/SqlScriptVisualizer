@@ -31,25 +31,39 @@ public class SqliteParser
 
     private void AddCompositePrimaryKey(string line)
     {
-        if (!line.Trim().StartsWith("constraint", StringComparison.OrdinalIgnoreCase) ||
-            !line.Contains("primary key", StringComparison.OrdinalIgnoreCase))
+        if (IsNotPrimaryKeyConstraintDefinition(line))
         {
             return;
         }
 
-        line = line.Remove(0, line.IndexOf('('))
+        line = ExtractCommaSeparatedListOfAttributeNames(line);
+        IEnumerable<string> pkAttrNames = TrimAllNames(line);
+        foreach (string name in pkAttrNames)
+        {
+            entity.Attributes
+                .Single(attr => attr.Name.Equals(name))
+                .IsPrimaryKey = true;
+        }
+    }
+
+    private static bool IsNotPrimaryKeyConstraintDefinition(string line)
+    {
+        return !line.Trim().StartsWith("constraint", StringComparison.OrdinalIgnoreCase) ||
+               !line.Contains("primary key", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static IEnumerable<string> TrimAllNames(string line)
+    {
+        return line.Split(",").Select(s => s.Trim());
+    }
+
+    private static string ExtractCommaSeparatedListOfAttributeNames(string line)
+    {
+        return line.Remove(0, line.IndexOf('('))
             .Replace("(", "")
             .Replace("),", "")
             .Replace("\r", "")
             .Replace("\"", "");
-        string[] pkAttrNames = line.Split(",");
-        foreach (string name in pkAttrNames)
-        {
-            string trimmedName = name.Trim();
-            entity.Attributes
-                .Single(attr => attr.Name.Equals(trimmedName))
-                .IsPrimaryKey = true;
-        }
     }
 
     private void AddForeignKey(string line)
