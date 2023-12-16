@@ -1,35 +1,31 @@
 ﻿@using Blazor.ViewModels
 @using Attribute = Blazor.Data.Models.Attribute
-<div style="
-width:100px; 
-display: inline-block; 
-border: 1px solid black; 
-position: absolute; 
-top:@Y; left: @X;
-background-color: lightgray"
+<div style="top: @Y;left: @X;"
+     class="entity-box"
      @ref="element">
-    <h5 style="
-    text-align: center; 
-    width: 100%; 
-    background-color: darkcyan; 
-    cursor: pointer; 
-    border-bottom: 1px solid black; 
-    user-select: none;
-    padding: 10px"
+    <h5 class="entity-header"
         @onmousedown="(e) => StartDrag(e)"
         @onmouseup="StopDrag"
         @onmouseleave="StopDrag"
         @onmousemove="(e) => DragEntity(e)">
-        @EVM.Entity.Name
+        @Evm.Entity.Name
     </h5>
-    @foreach (Attribute attr in EVM.Entity.Attributes)
-    {
-        <div style="padding-left: 10px">@attr.Name</div>
-    }
+    <table class="attribute-table">
+        @foreach (Attribute attr in Evm.Entity.Attributes)
+        {
+            <tr>
+                <td>
+                    @(attr.IsPrimaryKey ? "PK" :
+                    attr.ForeignKey != null ? "FK" : "")
+                </td>
+                <td>@attr.Name</td>
+            </tr>
+        }
+    </table>
 </div>
 
 @code {
-    [Parameter] public EntityViewModel EVM { get; set; }
+    [Parameter] public EntityViewModel Evm { get; set; }
     private int x = 100;
     private int y = 100;
     private string X => x + "px";
@@ -40,8 +36,8 @@ background-color: lightgray"
 
     protected override void OnInitialized()
     {
-        x = EVM.Xstart;
-        y = EVM.Ystart;
+        x = Evm.Xstart;
+        y = Evm.Ystart;
     }
 
     private void StartDrag(MouseEventArgs e)
