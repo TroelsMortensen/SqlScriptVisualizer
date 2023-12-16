@@ -1,5 +1,6 @@
 ﻿using Blazor.Data;
 using Blazor.Data.Models;
+using Attribute = Blazor.Data.Models.Attribute;
 
 namespace UnitTests.Data;
 
@@ -41,21 +42,27 @@ public class SqliteParser6TablesUnitTests
         Assert.Equal(count, entities[idx].Attributes.Count);
     }
 
-    [Fact]
-    public void AttributesHaveCorrectName()
+    [Theory]
+    [MemberData(nameof(AttributeNames))]
+    public void AttributesHaveCorrectName(int idx, List<string> inputNames)
     {
-        // Assert.Equal("Id", entities[0].Attributes[0].Name);
-        // Assert.Equal("Title", entities[0].Attributes[1].Name);
-        // Assert.Equal("Year", entities[0].Attributes[2].Name);
-        // Assert.Equal("Genre", entities[0].Attributes[3].Name);
-
-        // Assert.Equal("Id", entities[1].Attributes[0].Name);
-        // Assert.Equal("Title", entities[1].Attributes[1].Name);
-        // Assert.Equal("Runtime", entities[1].Attributes[2].Name);
-        // Assert.Equal("SeasonId", entities[1].Attributes[3].Name);
-        // Assert.Equal("TvShowId", entities[1].Attributes[4].Name);
+        List<Attribute> attributes = entities[idx].Attributes;
+        IEnumerable<string> attrNames = attributes.Select(attr => attr.Name);
+        Assert.Equal(inputNames, attrNames);
     }
 
+    public static IEnumerable<object[]> AttributeNames()
+    {
+        int i = 0;
+        yield return new object[] { i++, new List<string>(){"Id", "Name"} };
+        yield return new object[] { i++, new List<string>(){"Id", "Title", "PublishDate", "Price", "Publisher"} };
+        yield return new object[] { i++, new List<string>(){"Name"} };
+        yield return new object[] { i++, new List<string>(){"BookId", "AuthorId", "Order"} };
+        yield return new object[] { i++, new List<string>(){"Id", "PromotionalPrice", "PromotionalText", "BookId"} };
+        yield return new object[] { i++, new List<string>(){"Id", "Rating", "VoterName", "Comment", "BookId"} };
+        yield return new object[] { i++, new List<string>(){"BooksId", "CategoriesName"} };
+    }
+    
     [Fact]
     public void PrimaryKeyAttributesAreMarkedCorrectly()
     {
