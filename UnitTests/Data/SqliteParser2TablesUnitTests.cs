@@ -4,15 +4,15 @@ using Blazor.Data.Models;
 
 namespace UnitTests.Data;
 
-public class SqlParserUnitTests
+public class SqliteParser2TablesUnitTests
 {
-    private readonly SqliteParser parser;
     private readonly List<Entity> entities;
-
-    public SqlParserUnitTests()
+    
+    
+    public SqliteParser2TablesUnitTests()
     {
-        parser = new SqliteParser();
-        entities = parser.SqlScriptToEntities(twoTablesScript);
+        SqliteParser parser = new();
+        entities = parser.SqlScriptToEntities(TwoTablesScript);
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public class SqlParserUnitTests
         Assert.Equal("tvshowid", fkAttrName);
     }
 
-    private const string twoTablesScript = @"CREATE TABLE ""TvShows"" (
+    private const string TwoTablesScript = @"CREATE TABLE ""TvShows"" (
     ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_TvShows"" PRIMARY KEY AUTOINCREMENT,
     ""Title"" TEXT NOT NULL,
     ""Year"" INTEGER NOT NULL,
@@ -103,4 +103,6 @@ CREATE TABLE ""Episodes"" (
     ""TvShowId"" INTEGER NOT NULL,
     CONSTRAINT ""FK_Episodes_TvShows_TvShowId"" FOREIGN KEY (""TvShowId"") REFERENCES ""TvShows"" (""Id"") ON DELETE CASCADE
 );";
+
+
 }
