@@ -101,22 +101,19 @@ public class SqliteParser6TablesUnitTests
         Assert.Equal(count, entities[idx].Attributes.Count(attr => attr.IsPrimaryKey));
     }
 
-    // [Fact]
-    // public void MaxOneFkPerAttribute()
-    // {
-    //     IEnumerable<Attribute> allAttributes = entities.SelectMany(ent => ent.Attributes);
-    //     foreach (Attribute attribute in allAttributes)
-    //     {
-    //         Assert.True(attribute.ForeignKey.Count <= 1);
-    //     }
-    // }
-    
-    [Fact]
-    public void ForeignKeyAddedToAttributes()
+    [Theory]
+    [InlineData(3, "BookId", "Id", "Books")]
+    [InlineData(3, "AuthorId", "Id", "Author")]
+    [InlineData(4, "BookId", "Id", "Books")]
+    [InlineData(5, "BookId", "Id", "Books")]
+    [InlineData(6, "BooksId", "Id", "Books")]
+    [InlineData(6, "CategoriesName", "Name", "Categories")]
+    public void ForeignKeyAddedToAttributes(int idx, string attributeName, string targetAttributeName, string targetTableName)
     {
-        // Entity entity = entities[4]; // BookAuthor table
-        // List<ForeignKey> foreignKeys = entity.Attributes.Single(attr => attr.Name.Equals("BookId")).ForeignKeys;
-        // Assert.Single(foreignKeys);
+        Entity entity = entities[idx]; // BookAuthor table
+        ForeignKey fk = entity.Attributes.Single(attr => attr.Name.Equals(attributeName)).ForeignKey!;
+        Assert.Equal(targetAttributeName, fk.TargetAttributeName);
+        Assert.Equal(targetTableName, fk.TargetTableName);
     }
 
     [Fact]
