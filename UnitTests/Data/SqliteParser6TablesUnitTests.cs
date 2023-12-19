@@ -13,7 +13,7 @@ public class SqliteParser6TablesUnitTests
     public SqliteParser6TablesUnitTests()
     {
         SqliteParser parser = new();
-        entities = parser.SqlScriptToEntities(SixTablesScript);
+        entities = parser.SqlScriptToEntities(SqliteScriptTestData.SixTables);
     }
 
     [Fact]
@@ -117,54 +117,5 @@ public class SqliteParser6TablesUnitTests
     }
 
 
-    private const string SixTablesScript = @"CREATE TABLE ""Author"" (
-    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Author"" PRIMARY KEY AUTOINCREMENT,
-    ""Name"" TEXT NOT NULL
-);
-
-CREATE TABLE ""Books"" (
-    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Books"" PRIMARY KEY AUTOINCREMENT,
-    ""Title"" TEXT NOT NULL,
-    ""PublishDate"" TEXT NOT NULL,
-    ""Price"" TEXT NOT NULL,
-    ""Publisher"" TEXT NOT NULL
-);
-
-CREATE TABLE ""Categories"" (
-    ""Name"" TEXT NOT NULL CONSTRAINT ""PK_Categories"" PRIMARY KEY
-);
-
-CREATE TABLE ""BookAuthor"" (
-    ""BookId"" INTEGER NOT NULL,
-    ""AuthorId"" INTEGER NOT NULL,
-    ""Order"" INTEGER NOT NULL,
-    CONSTRAINT ""PK_BookAuthor"" PRIMARY KEY (""BookId"", ""AuthorId""),
-    CONSTRAINT ""FK_BookAuthor_Author_AuthorId"" FOREIGN KEY (""AuthorId"") REFERENCES ""Author"" (""Id"") ON DELETE CASCADE,
-    CONSTRAINT ""FK_BookAuthor_Books_BookId"" FOREIGN KEY (""BookId"") REFERENCES ""Books"" (""Id"") ON DELETE CASCADE
-);
-
-CREATE TABLE ""PriceOffers"" (
-    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_PriceOffers"" PRIMARY KEY AUTOINCREMENT,
-    ""PromotionalPrice"" TEXT NOT NULL,
-    ""PromotionalText"" TEXT NULL,
-    ""BookId"" INTEGER NOT NULL,
-    CONSTRAINT ""FK_PriceOffers_Books_BookId"" FOREIGN KEY (""BookId"") REFERENCES ""Books"" (""Id"") ON DELETE CASCADE
-);
-
-CREATE TABLE ""Reviews"" (
-    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Reviews"" PRIMARY KEY AUTOINCREMENT,
-    ""Rating"" INTEGER NOT NULL,
-    ""VoterName"" TEXT NOT NULL,
-    ""Comment"" TEXT NOT NULL,
-    ""BookId"" INTEGER NOT NULL,
-    CONSTRAINT ""FK_Reviews_Books_BookId"" FOREIGN KEY (""BookId"") REFERENCES ""Books"" (""Id"") ON DELETE CASCADE
-);
-
-CREATE TABLE ""BookCategory"" (
-    ""BooksId"" INTEGER NOT NULL,
-    ""CategoriesName"" TEXT NOT NULL,
-    CONSTRAINT ""PK_BookCategory"" PRIMARY KEY (""BooksId"", ""CategoriesName""),
-    CONSTRAINT ""FK_BookCategory_Books_BooksId"" FOREIGN KEY (""BooksId"") REFERENCES ""Books"" (""Id"") ON DELETE CASCADE,
-    CONSTRAINT ""FK_BookCategory_Categories_CategoriesName"" FOREIGN KEY (""CategoriesName"") REFERENCES ""Categories"" (""Name"") ON DELETE CASCADE
-);";
+    
 }

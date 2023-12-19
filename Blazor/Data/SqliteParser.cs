@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 using Blazor.Data.Models;
 using Attribute = Blazor.Data.Models.Attribute;
 
@@ -149,6 +150,7 @@ public class SqliteParser
 
         isInTable = false;
         result.Add(entity);
+        entity = null!;
     }
 
     private bool IsAttributeLine(string line)
