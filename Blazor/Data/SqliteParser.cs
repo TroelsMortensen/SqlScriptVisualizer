@@ -108,10 +108,10 @@ public partial class SqliteParser
 
     private static (string Table, string Attr) ExtractTargetTableAndAttribute(string line)
     {
-        string pattern = "foreign key \\(\"(\\w+)\"\\) references \\\"(\\w+)\\\" \\(\\\"(\\w+)\\\"\\)";
-        Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
-        Match match = r.Match(line);
-        GroupCollection groupCollection = match.Groups;
+        GroupCollection groupCollection =
+            new Regex("foreign key \\(\"(\\w+)\"\\) references \\\"(\\w+)\\\" \\(\\\"(\\w+)\\\"\\)", RegexOptions.IgnoreCase)
+                .Match(line)
+                .Groups;
         return (groupCollection[2].Value, groupCollection[3].Value);
     }
 
@@ -172,6 +172,5 @@ public partial class SqliteParser
 
     private bool IsStartOfTable(string line)
         => line.Contains("CREATE TABLE") && !isInTable;
-    [GeneratedRegex("foreign key \\(\"(\\w+)\"\\) references \\\"(\\w+)\\\" \\(\\\"(\\w+)\\\"\\)", RegexOptions.IgnoreCase, "en-GB")]
-    private static partial Regex MyRegex();
+
 }
