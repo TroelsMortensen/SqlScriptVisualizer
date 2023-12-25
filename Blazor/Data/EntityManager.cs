@@ -5,49 +5,49 @@ namespace Blazor.Data;
 
 public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organizer)
 {
-    public List<EntityViewModel> Entities { get; set; } = new();
 
     private const int EntityHeaderHeight = 35;
     private const int EntityAttributeHeight = 25;
-    private const int EntitySpacingX = 40;
-    private const int EntitySpacingY = 150;
-    
+    private const int EntitySpacingX = 250;
+    private const int EntitySpacingY = 40;
 
-    public void GenerateData(string script)
+
+    public List<EntityViewModel> GenerateData(string script)
     {
         List<Entity> entities = parser.SqlScriptToEntities(script);
 
         List<List<Entity>> placements = organizer.CalculateRelativePlacements(entities);
 
-        Entities = ConvertToViewModels(placements);
+        List<EntityViewModel> result = ConvertToViewModels(placements);
+        return result;
     }
 
     private List<EntityViewModel> ConvertToViewModels(List<List<Entity>> placements)
     {
         int x = 0;
-        int y = 0;
         List<EntityViewModel> result = new();
         foreach (List<Entity> column in placements)
         {
+            int y = 0;
             foreach (Entity entity in column)
             {
                 EntityViewModel evm = ConvertEntity(entity, x, y);
                 result.Add(evm);
-                x = UpdateXCoordinate(x, entity);
+                y = UpdateYCoordinate(y, entity);
             }
 
-            y += EntitySpacingY;
+            x += EntitySpacingX;
         }
 
         return result;
     }
 
-    private static int UpdateXCoordinate(int x, Entity entity)
+    private static int UpdateYCoordinate(int y, Entity entity)
     {
-        x += EntityHeaderHeight;
-        x += entity.Attributes.Count * EntityAttributeHeight;
-        x += EntitySpacingX;
-        return x;
+        y += EntityHeaderHeight;
+        y += entity.Attributes.Count * EntityAttributeHeight;
+        y += EntitySpacingY;
+        return y;
     }
 
     private static EntityViewModel ConvertEntity(Entity entity, int x, int y)

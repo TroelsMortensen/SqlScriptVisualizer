@@ -2,6 +2,10 @@
     
 }
 
+.attribute-table td:nth-child(1) {
+/*    shrink to fit?    */
+}
+
 .attribute-table td:nth-child(2) {
     padding-left: 10px;
 }
@@ -21,7 +25,7 @@
 }
 
 .entity-box {
-    width: 100px;
+    width: 150px;
     display: inline-block;
     border: 1px solid black;
     position: absolute;
