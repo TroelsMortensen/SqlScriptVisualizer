@@ -3,11 +3,11 @@ using Blazor.Data.Models;
 
 namespace UnitTests.Data;
 
-public class SixTablesPlacementCalculations
+public class SixTablesPlacementCalculationsTests
 {
     private readonly List<List<Entity>> placements;
 
-    public SixTablesPlacementCalculations()
+    public SixTablesPlacementCalculationsTests()
     {
         SqliteParser parser = new();
         EntityPlacementOrganizer organizer = new();
