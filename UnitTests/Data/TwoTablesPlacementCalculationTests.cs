@@ -5,15 +5,15 @@ namespace UnitTests.Data;
 
 public class TwoTablesPlacementCalculationTests
 {
-    private List<List<Entity>> placements;
-    private readonly List<Entity> entities;
+    private readonly List<List<Entity>> placements;
 
     public TwoTablesPlacementCalculationTests()
     {
         SqliteParser parser = new();
-        EntityManager entityManager = new(parser);
-        entities = parser.SqlScriptToEntities(SqliteScriptTestData.TwoTables);
-        placements = entityManager.CalculateRelativePlacements(entities);
+        EntityPlacementOrganizer organizer = new();
+
+        List<Entity> entities = parser.SqlScriptToEntities(SqliteScriptTestData.TwoTables);
+        placements = organizer.CalculateRelativePlacements(entities);
     }
 
     [Fact]
