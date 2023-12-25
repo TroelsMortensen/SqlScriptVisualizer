@@ -52,7 +52,7 @@ public class EntityPlacementOrganizer
         }
     }
 
-    private static int CalculatePlacementIndex(List<List<Entity>> placed, IEnumerable<string> namesOfFkTargetTables)
+    private static int CalculatePlacementIndex(List<List<Entity>> placed, List<string> namesOfFkTargetTables)
     {
         int maxIdx = 0;
         foreach (List<Entity> list in placed)
@@ -72,11 +72,10 @@ public class EntityPlacementOrganizer
 
 
     private static List<string> GetNamesOfFkTargetTables(Entity entityToPlace)
-    {
-        return entityToPlace.Attributes
+        => entityToPlace
+            .Attributes
             .Where(attr => attr.ForeignKey != null)
             .Select(attr => attr.ForeignKey!.TargetTableName).ToList();
-    }
 
     private static Entity FindNextEntityToPlace(List<Entity> unplaced, List<List<Entity>> placed)
     {
@@ -101,17 +100,15 @@ public class EntityPlacementOrganizer
         => foreignKeyNames.All(namesOfPlacedTables.Contains);
 
     private static List<string> GetNamesOfPlacedTables(List<List<Entity>> placed)
-    {
-        return placed.SelectMany(list => list)
+        => placed
+            .SelectMany(list => list)
             .Select(ent => ent.Name)
             .ToList();
-    }
 
     private static List<string> GetAttributeNamesOfAllForeignKeysOfEntity(Entity entity)
-    {
-        return entity.Attributes
+        => entity
+            .Attributes
             .Where(attr => attr.ForeignKey != null)
             .Select(attr => attr.ForeignKey!.TargetTableName)
-            .ToList()!;
-    }
+            .ToList();
 }
