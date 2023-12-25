@@ -18,6 +18,8 @@ CREATE TABLE ""Episodes"" (
     CONSTRAINT ""FK_Episodes_TvShows_TvShowId"" FOREIGN KEY (""TvShowId"") REFERENCES ""TvShows"" (""Id"") ON DELETE CASCADE
 );";
     
+// ###########################
+
     public const string SixTables = @"CREATE TABLE ""Author"" (
     ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Author"" PRIMARY KEY AUTOINCREMENT,
     ""Name"" TEXT NOT NULL
