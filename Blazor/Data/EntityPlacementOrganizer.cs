@@ -83,9 +83,9 @@ public class EntityPlacementOrganizer
         {
             List<string> foreignKeyNames = GetAttributeNamesOfAllForeignKeysOfEntity(entity);
 
-            List<string> namesOfPlacedTables = GetNamesOfPlacedTables(placed);
+            List<string> namesOfPlacedTables = GetNamesOfAlreadyPlacedTables(placed);
 
-            bool allFkTargetsArePlaced = AllTargetTablesArePlaced(foreignKeyNames, namesOfPlacedTables);
+            bool allFkTargetsArePlaced = AreAllTargetTablesPlaced(foreignKeyNames, namesOfPlacedTables);
 
             if (allFkTargetsArePlaced)
             {
@@ -96,10 +96,10 @@ public class EntityPlacementOrganizer
         throw new Exception("There must always be a next entity to place!");
     }
 
-    private static bool AllTargetTablesArePlaced(List<string> foreignKeyNames, List<string> namesOfPlacedTables)
+    private static bool AreAllTargetTablesPlaced(List<string> foreignKeyNames, List<string> namesOfPlacedTables)
         => foreignKeyNames.All(namesOfPlacedTables.Contains);
 
-    private static List<string> GetNamesOfPlacedTables(List<List<Entity>> placed)
+    private static List<string> GetNamesOfAlreadyPlacedTables(List<List<Entity>> placed)
         => placed
             .SelectMany(list => list)
             .Select(ent => ent.Name)
