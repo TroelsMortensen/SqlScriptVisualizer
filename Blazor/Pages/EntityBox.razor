@@ -62,6 +62,7 @@
     {
         if (!isDragging) return;
 
+        // following offsets are strangely necessary to maintain the entity box relative to where the mouse was clicked.
         y = (int)e.ClientY - 30; // hvorfor 20?
         x = (int)(e.ClientX - 770); // hvorfor 770?
     }

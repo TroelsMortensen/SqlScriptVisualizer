@@ -6,15 +6,15 @@
 <div style="height: 100vh; width: 100%; display: flex">
     <div style="height:100%; width: 80ch; display: flex; flex-flow: column">
         <div style="width:100%; flex:  0 1 40px">
-            <button @onclick="GenerateDiagram">Generate ></button>
+            <button @onclick="GenerateDiagram" style="float:right; margin: 5px">Generate -></button>
         </div>
         <textarea style="height: 95%; width: 100%; flex: 1 1 auto; resize: none" @bind="sqlScript">
 
         </textarea>
     </div>
     <div style="height:100%; flex: 1">
-        <div style="height:100%; width: 100%; background-color: red; border: 10px solid black; position: absolute"
-             @onclick="(e) => PrintCoords(e)">
+        <div style="height:100%; width: 100%; background-color: red; border: 10px solid black; position: relative"
+             @onclick="PrintCoords">
             @foreach (EntityViewModel entity in entities)
             {
                 <EntityBox Evm="entity"></EntityBox>
@@ -43,7 +43,7 @@ CREATE TABLE ""Episodes"" (
 );";
 
     private List<EntityViewModel> entities = new();
-    
+
     private void PrintCoords(MouseEventArgs e)
     {
         Console.WriteLine($"Board click pos: ({e.ClientX}, {e.ClientY})");
