@@ -1,6 +1,7 @@
 ﻿@using Blazor.ViewModels
 @using Attribute = Blazor.Data.Models.Attribute
-<div style="top: @Y;left: @X;"
+@using Blazor.Data
+<div style="top: @Y;left: @X; width: @Constants.EntityBoxWidth"
      class="entity-box"
      @ref="element">
     <h5 class="entity-header"
@@ -15,6 +16,7 @@
         {
             <tr>
                 <td>
+                    --- lav calc metode her
                     @(attr.IsPrimaryKey ? "PK" :
                     attr.ForeignKey != null ? "FK" : "")
                 </td>

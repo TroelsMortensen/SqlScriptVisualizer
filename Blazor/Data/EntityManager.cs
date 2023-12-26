@@ -6,12 +6,6 @@ namespace Blazor.Data;
 public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organizer)
 {
 
-    private const int EntityHeaderHeight = 35;
-    private const int EntityAttributeHeight = 25;
-    private const int EntitySpacingX = 250;
-    private const int EntitySpacingY = 40;
-
-
     public List<EntityViewModel> GenerateData(string script)
     {
         List<Entity> entities = parser.SqlScriptToEntities(script);
@@ -36,7 +30,7 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
                 y = UpdateYCoordinate(y, entity);
             }
 
-            x += EntitySpacingX;
+            x += Constants.EntitySpacingX + Constants.EntityBoxWidth;
         }
 
         return result;
@@ -44,9 +38,9 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
 
     private static int UpdateYCoordinate(int y, Entity entity)
     {
-        y += EntityHeaderHeight;
-        y += entity.Attributes.Count * EntityAttributeHeight;
-        y += EntitySpacingY;
+        y += Constants.EntityHeaderHeight;
+        y += entity.Attributes.Count * Constants.EntityAttributeHeight;
+        y += Constants.EntitySpacingY;
         return y;
     }
 
