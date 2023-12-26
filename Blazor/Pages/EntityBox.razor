@@ -27,9 +27,9 @@
 </div>
 
 @code {
-    [Parameter] public EntityViewModel Evm { get; set; }
-    private int x = 100;
-    private int y = 100;
+    [Parameter] public EntityViewModel Evm { get; set; } = null!;
+    private int x = 0;
+    private int y = 0;
     private string X => x + "px";
     private string Y => y + "px";
     private ElementReference element;

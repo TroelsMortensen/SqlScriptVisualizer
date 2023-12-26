@@ -52,10 +52,8 @@ CREATE TABLE ""Episodes"" (
     private async Task GenerateDiagram()
     {
         entities = new();
-        Console.WriteLine("Count: " + entities.Count);
         await Task.Delay(500);
         entities = EntityManager.GenerateData(sqlScript);
-        Console.WriteLine("Count: " + entities.Count);
     }
 
 }
