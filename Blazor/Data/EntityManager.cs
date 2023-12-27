@@ -35,7 +35,7 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
                 EntityViewModel targetVm = FindTargetEvm(entities, attr.ForeignKey!.TargetTableName);
                 int targetX = Constants.EntityBoxWidth;
                 int targetY = CalcTargetY(targetVm, attr.ForeignKey.TargetAttributeName);
-                FkLink fkl = new FkLink(entityVm, targetVm, (sourceX, sourceY), (targetX, targetY));
+                FkLink fkl = new (entityVm, targetVm, (sourceX, sourceY), (targetX, targetY));
                 links.Add(fkl);
             }
         }

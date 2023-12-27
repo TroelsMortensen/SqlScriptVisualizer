@@ -1,0 +1,16 @@
+﻿@using Blazor.ViewModels
+<div style="
+width:10px; 
+height: 10px;
+border-radius: 50%; 
+background-color: red;
+z-index: 10; 
+position: absolute;
+top: @("" + Link.SourcePoint.y + "px");
+left: @("" + Link.SourcePoint.x + "px");
+"></div>
+
+@code {
+    [Parameter] public FkLink Link { get; set; }
+
+}

@@ -19,6 +19,10 @@
             {
                 <EntityBox Evm="entity"></EntityBox>
             }
+            @foreach (FkLink link in links)
+            {
+                <FkLinkComp Link="link"/>
+            }
         </div>
     </div>
 </div>
