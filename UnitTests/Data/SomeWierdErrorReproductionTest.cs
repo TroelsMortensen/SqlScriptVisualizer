@@ -12,14 +12,14 @@ public class SomeWierdErrorReproductionTest
         SqliteParser parser = new();
         EntityPlacementOrganizer organizer = new();
         EntityManager em = new(parser, organizer);
-        List<EntityViewModel> entityViewModels = em.GenerateData(SqliteScriptTestData.TwoTables);
+        em.GenerateData(SqliteScriptTestData.TwoTables);
 
-        Assert.Equal(2, entityViewModels.Count);
-        
-        List<EntityViewModel> entityViewModels2 = em.GenerateData(SqliteScriptTestData.TwoTables);
+        Assert.Equal(2, em.Entities.Count);
 
-        Assert.Equal(2, entityViewModels2.Count);
-        
+        em.GenerateData(SqliteScriptTestData.TwoTables);
+
+        Assert.Equal(2, em.Entities.Count);
+
         // List<Entity> entities = parser.SqlScriptToEntities(SqliteScriptTestData.TwoTables);
         // placements = organizer.CalculateRelativePlacements(entities);
     }

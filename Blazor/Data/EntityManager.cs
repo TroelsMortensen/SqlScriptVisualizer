@@ -5,15 +5,26 @@ namespace Blazor.Data;
 
 public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organizer)
 {
+    public List<EntityViewModel> Entities { get; set; } = new();
+    public List<FkLink> FkLinks { get; set; } = new();
 
-    public List<EntityViewModel> GenerateData(string script)
+    public void GenerateData(string script)
     {
         List<Entity> entities = parser.SqlScriptToEntities(script);
 
         List<List<Entity>> placements = organizer.CalculateRelativePlacements(entities);
 
-        List<EntityViewModel> result = ConvertToViewModels(placements);
-        return result;
+        Entities = ConvertToViewModels(placements);
+        FkLinks = BuildLinks(Entities);
+    }
+
+    private List<FkLink> BuildLinks(List<EntityViewModel> entities)
+    {
+        List<FkLink> links = new();
+        
+        
+
+        return null;
     }
 
     private List<EntityViewModel> ConvertToViewModels(List<List<Entity>> placements)

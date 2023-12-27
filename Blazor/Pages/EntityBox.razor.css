@@ -4,6 +4,8 @@
 
 .attribute-table td:nth-child(1) {
 /*    shrink to fit?    */
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 .attribute-table td:nth-child(2) {

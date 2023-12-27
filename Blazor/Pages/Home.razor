@@ -13,7 +13,7 @@
         </textarea>
     </div>
     <div style="height:100%; flex: 1">
-        <div style="height:100%; width: 100%; background-color: red; border: 10px solid black; position: relative"
+        <div style="height:100%; width: 100%; background-color: lightblue; border: 10px solid black; position: relative"
              @onclick="PrintCoords">
             @foreach (EntityViewModel entity in entities)
             {
@@ -43,7 +43,8 @@ CREATE TABLE ""Episodes"" (
 );";
 
     private List<EntityViewModel> entities = new();
-
+    private List<FkLink> links = new();
+    
     private void PrintCoords(MouseEventArgs e)
     {
         Console.WriteLine($"Board click pos: ({e.ClientX}, {e.ClientY})");
@@ -53,7 +54,9 @@ CREATE TABLE ""Episodes"" (
     {
         entities = new();
         await Task.Delay(500);
-        entities = EntityManager.GenerateData(sqlScript);
+        EntityManager.GenerateData(sqlScript);
+        entities = EntityManager.Entities;
+        links = EntityManager.FkLinks;
     }
 
 }

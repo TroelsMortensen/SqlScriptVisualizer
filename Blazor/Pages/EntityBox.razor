@@ -1,7 +1,7 @@
 ﻿@using Blazor.ViewModels
 @using Attribute = Blazor.Data.Models.Attribute
 @using Blazor.Data
-<div style="top: @Y;left: @X; width: @Constants.EntityBoxWidth"
+<div style="top: @Y;left: @X; width: @(Constants.EntityBoxWidth + "px")"
      class="entity-box"
      @ref="element">
     <h5 class="entity-header"
@@ -16,9 +16,8 @@
         {
             <tr>
                 <td>
-                    --- lav calc metode her
-                    @(attr.IsPrimaryKey ? "PK" :
-                    attr.ForeignKey != null ? "FK" : "")
+
+                    @ConstructPkFkString(attr)
                 </td>
                 <td>@attr.Name</td>
             </tr>
@@ -65,6 +64,22 @@
         // following offsets are strangely necessary to maintain the entity box relative to where the mouse was clicked.
         y = (int)e.ClientY - 30; // hvorfor 20?
         x = (int)(e.ClientX - 770); // hvorfor 770?
+    }
+
+    private string ConstructPkFkString(Attribute attr)
+    {
+        string result = "";
+        if (attr.IsPrimaryKey)
+        {
+            result += "PK";
+        }
+
+        if (attr.ForeignKey != null)
+        {
+            result += string.IsNullOrWhiteSpace(result) ? "FK" : ",FK";
+        }
+
+        return result;
     }
 
 }
