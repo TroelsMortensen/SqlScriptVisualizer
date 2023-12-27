@@ -1,28 +1,28 @@
 ﻿@using Blazor.ViewModels
-<div style="
-width:10px; 
-height: 10px;
-border-radius: 50%; 
-background-color: red;
-z-index: 10; 
-position: absolute;
-top: @("" + Link.SourcePoint.y + "px");
-left: @("" + Link.SourcePoint.x + "px");
-"></div>
+@using Blazor.Data.Models
+@implements IDisposable
+@inject RedrawEventPublisher Redrawer
 
-<div style="
-width:10px; 
-height: 10px;
-border-radius: 50%; 
-background-color: limegreen;
-z-index: 10; 
-position: absolute;
-top: @("" + Link.TargetPoint.y + "px");
-left: @("" + Link.TargetPoint.x + "px");
-"></div>
-
-<path stroke="black" fill="none" d="M @(Link.TargetPoint.x) @(Link.TargetPoint.y) C @(Link.TargetPoint.x+50) @(Link.TargetPoint.y), @(Link.SourcePoint.x-50) @(Link.SourcePoint.y), @(Link.SourcePoint.x) @(Link.SourcePoint.y)"></path>
+<path stroke="black" fill="none" d="M @(Link.TargetPoint.x) @(Link.TargetPoint.y) C @(Link.TargetPoint.x + 50) @(Link.TargetPoint.y), @(Link.SourcePoint.x - 50) @(Link.SourcePoint.y), @(Link.SourcePoint.x) @(Link.SourcePoint.y)"></path>
 
 @code {
-    [Parameter] public FkLink Link { get; set; }
+    [Parameter] public FkLink Link { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        Redrawer.OnRedraw += RedrawLine;
+    }
+
+    private void RedrawLine()
+    {
+        Console.WriteLine("I should redraw my line");
+        Console.WriteLine("y coord from link: " + Link.SourcePoint.y);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Redrawer.OnRedraw -= RedrawLine;
+    }
+
 }

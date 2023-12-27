@@ -13,11 +13,11 @@
         </textarea>
     </div>
     <div style="height:100%; flex: 1">
-        <div style="height:100%; width: 100%; background-color: lightblue; border: 10px solid black; position: relative"
+        <div style="height:100%; width: 100%;  background-image: url('images/Background.jpg'); background-repeat: repeat; border: 10px solid black; position: relative; "
              @onclick="PrintCoords">
             @foreach (EntityViewModel entity in entities)
             {
-                <EntityBox Evm="entity"></EntityBox>
+                <EntityBox Evm="entity" OnRelease="ReDraw"></EntityBox>
             }
             <svg style="width: 100%;height: 100%">
                 @foreach (FkLink link in links)
@@ -63,6 +63,12 @@ CREATE TABLE ""Episodes"" (
         EntityManager.GenerateData(sqlScript);
         entities = EntityManager.Entities;
         links = EntityManager.FkLinks;
+    }
+
+    private void ReDraw()
+    {
+        Console.WriteLine("State change");
+        StateHasChanged();
     }
 
 }

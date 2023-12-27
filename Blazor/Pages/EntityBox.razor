@@ -1,6 +1,8 @@
 ﻿@using Blazor.ViewModels
 @using Attribute = Blazor.Data.Models.Attribute
 @using Blazor.Data
+@using Blazor.Data.Models
+@inject RedrawEventPublisher Redrawer
 <div style="top: @Y;left: @X; width: @(Constants.EntityBoxWidth + "px")"
      class="entity-box"
      @ref="element">
@@ -27,27 +29,30 @@
 
 @code {
     [Parameter] public EntityViewModel Evm { get; set; } = null!;
-    private int x = 0;
-    private int y = 0;
-    private string X => x + "px";
-    private string Y => y + "px";
+    
+    [Parameter] public EventCallback OnRelease { get; set; }
+    
+    // private int x = 0;
+    // private int y = 0;
+    private string X => Evm.X + "px";
+    private string Y => Evm.Y + "px";
     private ElementReference element;
     private bool isDragging;
     private double xOffset;
 
-    protected override void OnInitialized()
-    {
-        x = Evm.Xstart;
-        y = Evm.Ystart;
-    }
+    // protected override void OnInitialized()
+    // {
+    //     x = Evm.X;
+    //     y = Evm.Y;
+    // }
 
     private void StartDrag(MouseEventArgs e)
     {
         xOffset = e.ClientX;
         isDragging = true;
         Console.WriteLine(e.ClientX);
-        Console.WriteLine("offset click: " + (e.ClientX - x));
-        Console.WriteLine("offset click: " + (e.ClientY - y));
+        Console.WriteLine("offset click: " + (e.ClientX - Evm.X));
+        Console.WriteLine("offset click: " + (e.ClientY - Evm.Y));
     }
 
     private void StopDrag()
@@ -55,6 +60,9 @@
         if (!isDragging) return;
         Console.WriteLine("Stop");
         isDragging = false;
+        Redrawer.RaiseRedrawEvent();
+        Console.WriteLine("y coord from entity: " + Evm.Y);
+        // await OnRelease.InvokeAsync();
     }
 
     private void DragEntity(MouseEventArgs e)
@@ -62,8 +70,8 @@
         if (!isDragging) return;
 
         // following offsets are strangely necessary to maintain the entity box relative to where the mouse was clicked.
-        y = (int)e.ClientY - 30; // hvorfor 20?
-        x = (int)(e.ClientX - 770); // hvorfor 770?
+        Evm.Y = (int)e.ClientY - 30; // hvorfor 20?
+        Evm.X = (int)(e.ClientX - 810); // hvorfor 770?
     }
 
     private string ConstructPkFkString(Attribute attr)

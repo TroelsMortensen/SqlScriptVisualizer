@@ -2,8 +2,8 @@
 
 public class FkLink
 {
-    public (int x, int y) SourcePoint => (relativeSourcePoint.x + source.Xstart, relativeSourcePoint.y + source.Ystart);
-    public (int x, int y) TargetPoint => (relativeTargetPoint.x + target.Xstart, relativeTargetPoint.y + target.Ystart);
+    public (int x, int y) SourcePoint => (relativeSourcePoint.x + source.X, relativeSourcePoint.y + source.Y);
+    public (int x, int y) TargetPoint => (relativeTargetPoint.x + target.X, relativeTargetPoint.y + target.Y);
     
     private readonly EntityViewModel source;
     private readonly EntityViewModel target;
