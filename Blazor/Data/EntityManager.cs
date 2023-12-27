@@ -88,7 +88,7 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
         => new()
         {
             Entity = entity,
-            X = x,
-            Y = y
+            X = x + 15,
+            Y = y + 15
         };
 }
