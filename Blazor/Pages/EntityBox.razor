@@ -60,9 +60,7 @@
         if (!isDragging) return;
         Console.WriteLine("Stop");
         isDragging = false;
-        Redrawer.RaiseRedrawEvent();
-        Console.WriteLine("y coord from entity: " + Evm.Y);
-        // await OnRelease.InvokeAsync();
+        // Redrawer.RaiseRedrawEvent();
     }
 
     private void DragEntity(MouseEventArgs e)
@@ -72,6 +70,7 @@
         // following offsets are strangely necessary to maintain the entity box relative to where the mouse was clicked.
         Evm.Y = (int)e.ClientY - 30; // hvorfor 20?
         Evm.X = (int)(e.ClientX - 810); // hvorfor 770?
+        Redrawer.RaiseRedrawEvent();
     }
 
     private string ConstructPkFkString(Attribute attr)
