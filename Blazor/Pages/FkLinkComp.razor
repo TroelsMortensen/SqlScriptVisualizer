@@ -10,7 +10,19 @@ top: @("" + Link.SourcePoint.y + "px");
 left: @("" + Link.SourcePoint.x + "px");
 "></div>
 
+<div style="
+width:10px; 
+height: 10px;
+border-radius: 50%; 
+background-color: limegreen;
+z-index: 10; 
+position: absolute;
+top: @("" + Link.TargetPoint.y + "px");
+left: @("" + Link.TargetPoint.x + "px");
+"></div>
+
+<path stroke="black" fill="none" d="M @(Link.TargetPoint.x) @(Link.TargetPoint.y) C @(Link.TargetPoint.x+50) @(Link.TargetPoint.y), @(Link.SourcePoint.x-50) @(Link.SourcePoint.y), @(Link.SourcePoint.x) @(Link.SourcePoint.y)"></path>
+
 @code {
     [Parameter] public FkLink Link { get; set; }
-
 }

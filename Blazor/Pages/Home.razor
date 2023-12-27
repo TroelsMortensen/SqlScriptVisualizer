@@ -19,10 +19,12 @@
             {
                 <EntityBox Evm="entity"></EntityBox>
             }
-            @foreach (FkLink link in links)
-            {
-                <FkLinkComp Link="link"/>
-            }
+            <svg style="width: 100%;height: 100%">
+                @foreach (FkLink link in links)
+                {
+                    <FkLinkComp Link="link"/>
+                }
+            </svg>
         </div>
     </div>
 </div>
@@ -48,7 +50,7 @@ CREATE TABLE ""Episodes"" (
 
     private List<EntityViewModel> entities = new();
     private List<FkLink> links = new();
-    
+
     private void PrintCoords(MouseEventArgs e)
     {
         Console.WriteLine($"Board click pos: ({e.ClientX}, {e.ClientY})");

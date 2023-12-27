@@ -17,6 +17,7 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
         List<List<Entity>> placements = organizer.CalculateRelativePlacements(entities);
 
         Entities = ConvertToViewModels(placements);
+
         FkLinks = BuildLinks(Entities);
     }
 
@@ -28,14 +29,14 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
             for (var index = 0; index < entityVm.Entity.Attributes.Count; index++)
             {
                 Attribute attr = entityVm.Entity.Attributes[index];
-                if (attr.ForeignKey != null) continue;
-                
-                int sourceY = Constants.EntityHeaderHeight + index * Constants.EntityAttributeHeight;
+                if (attr.ForeignKey == null) continue;
+
+                int sourceY = CalcSourceY(index);
                 int sourceX = 0;
-                EntityViewModel targetVm = FindTargetEvm(entities, attr.ForeignKey!.TargetTableName);
+                EntityViewModel targetVm = FindTargetEntityViewModel(entities, attr.ForeignKey!.TargetTableName);
                 int targetX = Constants.EntityBoxWidth;
                 int targetY = CalcTargetY(targetVm, attr.ForeignKey.TargetAttributeName);
-                FkLink fkl = new (entityVm, targetVm, (sourceX, sourceY), (targetX, targetY));
+                FkLink fkl = new(entityVm, targetVm, (sourceX, sourceY), (targetX, targetY));
                 links.Add(fkl);
             }
         }
@@ -43,15 +44,19 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
         return links;
     }
 
+    private static int CalcSourceY(int index)
+        => Constants.EntityHeaderHeight + (1 + index) * Constants.EntityAttributeHeight +
+           Constants.EntityAttributeHeight / 4; // why magic 4? Thought it would be 2.
+
     private static int CalcTargetY(EntityViewModel targetVm, string fkAttr)
     {
         Attribute attribute = targetVm.Entity.Attributes.Single(attr => attr.Name.Equals(fkAttr));
-        int idx = targetVm.Entity.Attributes.IndexOf(attribute);
-        return Constants.EntityHeaderHeight + idx * Constants.EntityAttributeHeight;
+        int idx = targetVm.Entity.Attributes.IndexOf(attribute) + 1;
+        return Constants.EntityHeaderHeight + idx * Constants.EntityAttributeHeight + Constants.EntityAttributeHeight / 4;
     }
 
-    private static EntityViewModel FindTargetEvm(List<EntityViewModel> entities, string foreignKeyTargetTableName)
-        => entities.First(evm => evm.Entity.Name.Equals(foreignKeyTargetTableName));
+    private static EntityViewModel FindTargetEntityViewModel(List<EntityViewModel> entities, string foreignKeyTargetTableName)
+        => entities.Single(evm => evm.Entity.Name.Equals(foreignKeyTargetTableName));
 
 
     private static List<EntityViewModel> ConvertToViewModels(List<List<Entity>> placements)
@@ -75,21 +80,15 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
     }
 
     private static int UpdateYCoordinate(int y, Entity entity)
-    {
-        y += Constants.EntityHeaderHeight;
-        y += entity.Attributes.Count * Constants.EntityAttributeHeight;
-        y += Constants.EntitySpacingY;
-        return y;
-    }
+        => y + Constants.EntityHeaderHeight +
+           entity.Attributes.Count * Constants.EntityAttributeHeight +
+           Constants.EntitySpacingY;
 
     private static EntityViewModel ConvertEntity(Entity entity, int x, int y)
-    {
-        EntityViewModel evm = new()
+        => new()
         {
             Entity = entity,
             Xstart = x,
             Ystart = y
         };
-        return evm;
-    }
 }
