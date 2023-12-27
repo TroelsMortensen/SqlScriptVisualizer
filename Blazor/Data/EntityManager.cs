@@ -1,5 +1,6 @@
 ﻿using Blazor.Data.Models;
 using Blazor.ViewModels;
+using Attribute = Blazor.Data.Models.Attribute;
 
 namespace Blazor.Data;
 
@@ -21,7 +22,17 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
     private List<FkLink> BuildLinks(List<EntityViewModel> entities)
     {
         List<FkLink> links = new();
-        
+        foreach (EntityViewModel entity in entities)
+        {
+            for (var index = 0; index < entity.Entity.Attributes.Count; index++)
+            {
+                Attribute attr = entity.Entity.Attributes[index];
+                if (attr.ForeignKey != null) continue;
+                int sourceY = Constants.EntityHeaderHeight + index * Constants.EntityAttributeHeight;
+                int sourceX = 0;
+
+            }
+        }
         
 
         return null;
