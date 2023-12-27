@@ -1,4 +1,5 @@
-﻿using Blazor.Data.Models;
+﻿using System.Reflection.Metadata;
+using Blazor.Data.Models;
 using Blazor.ViewModels;
 using Attribute = Blazor.Data.Models.Attribute;
 
@@ -22,23 +23,38 @@ public class EntityManager(SqliteParser parser, EntityPlacementOrganizer organiz
     private List<FkLink> BuildLinks(List<EntityViewModel> entities)
     {
         List<FkLink> links = new();
-        foreach (EntityViewModel entity in entities)
+        foreach (EntityViewModel entityVm in entities)
         {
-            for (var index = 0; index < entity.Entity.Attributes.Count; index++)
+            for (var index = 0; index < entityVm.Entity.Attributes.Count; index++)
             {
-                Attribute attr = entity.Entity.Attributes[index];
+                Attribute attr = entityVm.Entity.Attributes[index];
                 if (attr.ForeignKey != null) continue;
+                
                 int sourceY = Constants.EntityHeaderHeight + index * Constants.EntityAttributeHeight;
                 int sourceX = 0;
-
+                EntityViewModel targetVm = FindTargetEvm(entities, attr.ForeignKey!.TargetTableName);
+                int targetX = Constants.EntityBoxWidth;
+                int targetY = CalcTargetY(targetVm, attr.ForeignKey.TargetAttributeName);
+                FkLink fkl = new FkLink(entityVm, targetVm, (sourceX, sourceY), (targetX, targetY));
+                links.Add(fkl);
             }
         }
-        
 
-        return null;
+        return links;
     }
 
-    private List<EntityViewModel> ConvertToViewModels(List<List<Entity>> placements)
+    private static int CalcTargetY(EntityViewModel targetVm, string fkAttr)
+    {
+        Attribute attribute = targetVm.Entity.Attributes.Single(attr => attr.Name.Equals(fkAttr));
+        int idx = targetVm.Entity.Attributes.IndexOf(attribute);
+        return Constants.EntityHeaderHeight + idx * Constants.EntityAttributeHeight;
+    }
+
+    private static EntityViewModel FindTargetEvm(List<EntityViewModel> entities, string foreignKeyTargetTableName)
+        => entities.First(evm => evm.Entity.Name.Equals(foreignKeyTargetTableName));
+
+
+    private static List<EntityViewModel> ConvertToViewModels(List<List<Entity>> placements)
     {
         int x = 0;
         List<EntityViewModel> result = new();
