@@ -7,6 +7,4 @@ public static class Constants
     public const int EntitySpacingX = 100;
     public const int EntityBoxWidth = 200;
     public const int EntitySpacingY = 40;
-
-    public const string Version = "0.9.1";
 }
