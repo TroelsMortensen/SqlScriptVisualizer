@@ -3,7 +3,8 @@
 @implements IDisposable
 @inject RedrawEventPublisher Redrawer
 
-<path stroke="black" fill="none" d="M @(Link.TargetPoint.x) @(Link.TargetPoint.y) C @(Link.TargetPoint.x + 50) @(Link.TargetPoint.y), @(Link.SourcePoint.x - 50) @(Link.SourcePoint.y), @(Link.SourcePoint.x) @(Link.SourcePoint.y)"></path>
+<path stroke="black" fill="none" d="M @(Link.TargetPoint.x+10) @(Link.TargetPoint.y) C @(Link.TargetPoint.x + 50) @(Link.TargetPoint.y), @(Link.SourcePoint.x - 50) @(Link.SourcePoint.y), @(Link.SourcePoint.x) @(Link.SourcePoint.y)"></path>
+<path d="M0 0 L15 3 L3 15 Z" style="transform: rotate(-45deg); translate: @(Link.TargetPoint.x)px @(Link.TargetPoint.y)px"/>
 
 @code {
     [Parameter] public FkLink Link { get; set; } = null!;
@@ -15,8 +16,6 @@
 
     private void RedrawLine()
     {
-        Console.WriteLine("I should redraw my line");
-        Console.WriteLine("y coord from link: " + Link.SourcePoint.y);
         StateHasChanged();
     }
 
