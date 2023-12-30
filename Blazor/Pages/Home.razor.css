@@ -1,0 +1,47 @@
+﻿.outer-box {
+    height: 100vh; width: 100%; display: flex;
+}
+
+.left-side-box {
+    height: 100%;
+    width: 80ch;
+    display: flex;
+    flex-flow: column;
+}
+
+.left-side-top-area {
+    width: 100%;
+    flex: 0 1 40px;
+}
+
+.button-generate {
+    float: right;
+    margin: 5px
+}
+
+.script-input-area {
+    height: 95%;
+    width: 100%;
+    flex: 1 1 auto;
+    resize: none;
+}
+
+.right-side-box {
+    height: 100%;
+    flex: 1;
+}
+
+.diagram-canvas {
+    height: 100%;
+    width: 100%;
+    background-image: url('images/Background.jpg');
+    background-repeat: repeat;
+    border: 10px solid black;
+    position: relative;
+}
+
+.fk-link-svg-canvas {
+    width: 100%;
+    height: 100%;
+}
+

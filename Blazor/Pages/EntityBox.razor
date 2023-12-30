@@ -3,9 +3,9 @@
 @using Blazor.Data
 @using Blazor.Data.Models
 @inject RedrawEventPublisher Redrawer
+
 <div style="top: @Y;left: @X; width: @(Constants.EntityBoxWidth + "px")"
-     class="entity-box"
-     @ref="element">
+     class="entity-box">
     <h5 class="entity-header"
         @onmousedown="(e) => StartDrag(e)"
         @onmouseup="StopDrag"
@@ -32,35 +32,21 @@
     
     [Parameter] public EventCallback OnRelease { get; set; }
     
-    // private int x = 0;
-    // private int y = 0;
     private string X => Evm.X + "px";
     private string Y => Evm.Y + "px";
-    private ElementReference element;
     private bool isDragging;
     private double xOffset;
-
-    // protected override void OnInitialized()
-    // {
-    //     x = Evm.X;
-    //     y = Evm.Y;
-    // }
 
     private void StartDrag(MouseEventArgs e)
     {
         xOffset = e.ClientX;
         isDragging = true;
-        Console.WriteLine(e.ClientX);
-        Console.WriteLine("offset click: " + (e.ClientX - Evm.X));
-        Console.WriteLine("offset click: " + (e.ClientY - Evm.Y));
     }
 
     private void StopDrag()
     {
         if (!isDragging) return;
-        Console.WriteLine("Stop");
         isDragging = false;
-        // Redrawer.RaiseRedrawEvent();
     }
 
     private void DragEntity(MouseEventArgs e)
@@ -88,5 +74,4 @@
 
         return result;
     }
-
 }

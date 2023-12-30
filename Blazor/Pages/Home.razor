@@ -3,24 +3,24 @@
 @using Blazor.Data
 @inject EntityManager EntityManager
 
-<div style="height: 100vh; width: 100%; display: flex">
-    <div style="height:100%; width: 80ch; display: flex; flex-flow: column">
-        <div style="width:100%; flex:  0 1 40px">
+<div class="outer-box">
+    <div class="left-side-box">
+        <div class="left-side-top-area">
             <label>V: @Constants.Version</label>
             <button @onclick="GenerateDiagram" style="float:right; margin: 5px">Generate -></button>
         </div>
-        <textarea style="height: 95%; width: 100%; flex: 1 1 auto; resize: none" @bind="sqlScript">
+        <textarea class="script-input-area" @bind="sqlScript">
 
         </textarea>
     </div>
-    <div style="height:100%; flex: 1">
-        <div style="height:100%; width: 100%;  background-image: url('images/Background.jpg'); background-repeat: repeat; border: 10px solid black; position: relative; "
+    <div class="right-side-box">
+        <div class="diagram-canvas"
              @onclick="PrintCoords">
             @foreach (EntityViewModel entity in entities)
             {
                 <EntityBox Evm="entity" OnRelease="ReDraw"></EntityBox>
             }
-            <svg style="width: 100%;height: 100%">
+            <svg class="fk-link-svg-canvas">
                 @foreach (FkLink link in links)
                 {
                     <FkLinkComp Link="link"/>
