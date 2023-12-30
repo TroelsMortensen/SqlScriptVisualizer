@@ -11,7 +11,7 @@
 
     protected override void OnInitialized()
     {
-        Redrawer.OnRedraw += RedrawLine;
+        Redrawer.OnDragEntity += RedrawLine;
     }
 
     private void RedrawLine()
@@ -21,7 +21,7 @@
 
     public void Dispose()
     {
-        Redrawer.OnRedraw -= RedrawLine;
+        Redrawer.OnDragEntity -= RedrawLine;
     }
 
 }

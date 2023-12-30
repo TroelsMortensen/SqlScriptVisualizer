@@ -4,10 +4,16 @@ namespace Blazor.Data.Models;
 
 public class RedrawEventPublisher
 {
-    public Action OnRedraw { get; set; }
+    public Action OnDragEntity { get; set; }
+    public Action<(double x, double y)> OnMoveCanvas { get; set; }
 
     public void RaiseRedrawEvent()
     {
-        OnRedraw?.Invoke();
+        OnDragEntity?.Invoke();
+    }
+
+    public void MoveCanves((double x, double y) diff)
+    {
+        OnMoveCanvas?.Invoke(diff);
     }
 }

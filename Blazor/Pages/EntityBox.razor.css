@@ -26,6 +26,12 @@
     padding: 10px
 }
 
+.entity-header:hover{
+    cursor: grab;
+}
+.entity-header:active {
+    cursor: grabbing;
+}
 .entity-box {
     display: inline-block;
     border: 1px solid black;

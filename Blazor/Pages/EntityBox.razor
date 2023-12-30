@@ -3,14 +3,15 @@
 @using Blazor.Data
 @using Blazor.Data.Models
 @inject RedrawEventPublisher Redrawer
+@implements IDisposable
 
-<div style="top: @Y;left: @X; width: @(Constants.EntityBoxWidth + "px")"
+<div style="top: @Y;left: @X; width: @(Constants.EntityBoxWidth + "px"); "
      class="entity-box">
     <h5 class="entity-header"
-        @onmousedown="(e) => StartDrag(e)"
+        @onmousedown="StartDrag"
         @onmouseup="StopDrag"
         @onmouseleave="StopDrag"
-        @onmousemove="(e) => DragEntity(e)">
+        @onmousemove="DragEntity">
         @Evm.Entity.Name
     </h5>
     <table class="attribute-table">
@@ -36,6 +37,17 @@
     private string Y => Evm.Y + "px";
     private bool isDragging;
     private double xOffset;
+
+    protected override void OnInitialized()
+    {
+        Redrawer.OnMoveCanvas += CanvasMoved;
+    }
+
+    private void CanvasMoved((double x, double y) diff)
+    {
+        Evm.X += (int)diff.x;
+        Evm.Y += (int)diff.y;
+    }
 
     private void StartDrag(MouseEventArgs e)
     {
@@ -74,4 +86,10 @@
 
         return result;
     }
+
+    public void Dispose()
+    {
+        Redrawer.OnMoveCanvas -= CanvasMoved;
+    }
+
 }

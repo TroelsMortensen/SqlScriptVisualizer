@@ -1,7 +1,9 @@
 ﻿@page "/"
 @using Blazor.ViewModels
 @using Blazor.Data
+@using Blazor.Data.Models
 @inject EntityManager EntityManager
+@inject RedrawEventPublisher Redrawer
 
 <div class="outer-box">
     <div class="left-side-box">
@@ -15,7 +17,10 @@
     </div>
     <div class="right-side-box">
         <div class="diagram-canvas"
-             @onclick="PrintCoords">
+             @onmousedown="StartDrag"
+             @onmousemove="Drag"
+             @onmouseleave="StopDrag"
+             @onmouseup="StopDrag">
             @foreach (EntityViewModel entity in entities)
             {
                 <EntityBox Evm="entity" OnRelease="ReDraw"></EntityBox>
@@ -51,11 +56,13 @@ CREATE TABLE ""Episodes"" (
 
     private List<EntityViewModel> entities = new();
     private List<FkLink> links = new();
+    private bool isDraggingCanvas;
+    private double prevX, prevY;
 
-    private void PrintCoords(MouseEventArgs e)
-    {
-        Console.WriteLine($"Board click pos: ({e.ClientX}, {e.ClientY})");
-    }
+    // private void PrintCoords(MouseEventArgs e)
+    // {
+    //     Console.WriteLine($"Board click pos: ({e.ClientX}, {e.ClientY})");
+    // }
 
     private async Task GenerateDiagram()
     {
@@ -70,6 +77,31 @@ CREATE TABLE ""Episodes"" (
     {
         Console.WriteLine("State change");
         StateHasChanged();
+    }
+
+    private void StartDrag(MouseEventArgs args)
+    {
+        isDraggingCanvas = true;
+        prevX = args.ClientX;
+        prevY = args.ClientY;
+    }
+
+    private void Drag(MouseEventArgs args)
+    {
+        if (!isDraggingCanvas)
+        {
+            return;
+        }
+
+        (double x, double y) diff = (args.ClientX - prevX, args.ClientY - prevY);
+        prevX = args.ClientX;
+        prevY = args.ClientY;
+        Redrawer.MoveCanves(diff);
+    }
+    
+    private void StopDrag(MouseEventArgs args)
+    {
+        isDraggingCanvas = false;
     }
 
 }

@@ -38,6 +38,12 @@
     background-repeat: repeat;
     border: 10px solid black;
     position: relative;
+    cursor: move;
+    overflow: hidden;
+}
+
+.diagram-canvas:active{
+    cursor:grabbing;
 }
 
 .fk-link-svg-canvas {
