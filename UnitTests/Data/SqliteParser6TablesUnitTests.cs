@@ -13,7 +13,8 @@ public class SqliteParser6TablesUnitTests
 
     public SqliteParser6TablesUnitTests()
     {
-        SqliteParser parser = new();
+        ISqlParser parser = SqlParserFactory.GetParser("sqlite");
+
         entities = parser.SqlScriptToEntities(SqliteScriptTestData.SixTables);
     }
 

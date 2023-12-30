@@ -10,7 +10,8 @@ public class SomeWierdErrorReproductionTest
     [Fact]
     public void GeneratingDataTwiceDoesNotDoubleEntityCount()
     {
-        SqliteParser parser = new();
+        ISqlParser parser = SqlParserFactory.GetParser("sqlite");
+
         EntityManager em = new(parser);
         em.GenerateData(SqliteScriptTestData.TwoTables);
 

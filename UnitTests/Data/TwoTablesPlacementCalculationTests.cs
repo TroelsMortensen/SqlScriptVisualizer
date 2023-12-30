@@ -10,7 +10,8 @@ public class TwoTablesPlacementCalculationTests
 
     public TwoTablesPlacementCalculationTests()
     {
-        SqliteParser parser = new();
+        ISqlParser parser = SqlParserFactory.GetParser("sqlite");
+
         EntityPlacementOrganizer organizer = new();
 
         List<Entity> entities = parser.SqlScriptToEntities(SqliteScriptTestData.TwoTables);

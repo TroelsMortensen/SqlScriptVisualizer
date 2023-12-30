@@ -1,12 +1,10 @@
-﻿using System.Reflection.Metadata;
-using Blazor.Data.Models;
+﻿using Blazor.Data.Models;
 using Blazor.Data.Parsers;
 using Blazor.ViewModels;
-using Attribute = Blazor.Data.Models.Attribute;
 
 namespace Blazor.Data;
 
-public class EntityManager(SqliteParser parser)
+public class EntityManager(ISqlParser parser)
 {
     public List<EntityViewModel> Entities { get; set; } = new();
     public List<FkLink> FkLinks { get; set; } = new();

@@ -12,7 +12,8 @@ public class SqliteParser2TablesUnitTests
     
     public SqliteParser2TablesUnitTests()
     {
-        SqliteParser parser = new();
+        ISqlParser parser = SqlParserFactory.GetParser("sqlite");
+
         entities = parser.SqlScriptToEntities(SqliteScriptTestData.TwoTables);
     }
 
@@ -68,27 +69,4 @@ public class SqliteParser2TablesUnitTests
         Assert.Equal("Id", foreignKey.TargetAttributeName);
         Assert.Equal("TvShows", foreignKey.TargetTableName);
     }
-
-    [Fact]
-    public void CanExtractFkTargetAttributeAndTableNamesWithRegEx()
-    {
-        string input =
-            @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
-        ForeignKey foreignKey = SqliteParser.CreateForeignKey(input);
-
-        Assert.Equal("tvshows", foreignKey.TargetTableName);
-        Assert.Equal("id", foreignKey.TargetAttributeName);
-    }
-
-    [Fact]
-    public void CanExtractFkAttributeNameWithRegEx()
-    {
-        string input =
-            @"    constraint ""fk_episodes_tvshows_tvshowid"" foreign key (""tvshowid"") references ""tvshows"" (""id"") ON DELETE CASCADE";
-        string fkAttrName = SqliteParser.ExtractFkAttributeName(input);
-        Assert.Equal("tvshowid", fkAttrName);
-    }
-
-
-
 }

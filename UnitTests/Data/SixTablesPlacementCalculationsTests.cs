@@ -10,7 +10,7 @@ public class SixTablesPlacementCalculationsTests
 
     public SixTablesPlacementCalculationsTests()
     {
-        SqliteParser parser = new();
+        ISqlParser parser = SqlParserFactory.GetParser("sqlite");
         EntityPlacementOrganizer organizer = new();
         List<Entity> entities = parser.SqlScriptToEntities(SqliteScriptTestData.SixTables);
         placements = organizer.CalculateRelativePlacements(entities);

@@ -11,7 +11,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<EntityManager>();
-builder.Services.AddScoped<SqliteParser>();
+builder.Services.AddScoped<ISqlParser, SqliteParser>();
 builder.Services.AddScoped<RedrawEventPublisher>();
 
 await builder.Build().RunAsync();

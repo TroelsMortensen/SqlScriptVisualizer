@@ -8,7 +8,7 @@ public class FkLinkTests
     [Fact]
     public void LinksAreGenerated()
     {
-        SqliteParser parser = new();
+        ISqlParser parser = SqlParserFactory.GetParser("sqlite");
         EntityManager em = new(parser);
         em.GenerateData(SqliteScriptTestData.TwoTables);
     }
