@@ -8,8 +8,7 @@ public class FkLinkTests
     public void LinksAreGenerated()
     {
         SqliteParser parser = new();
-        EntityPlacementOrganizer organizer = new();
-        EntityManager em = new(parser, organizer);
+        EntityManager em = new(parser);
         em.GenerateData(SqliteScriptTestData.TwoTables);
     }
 }
