@@ -66,6 +66,7 @@ CREATE TABLE ""Episodes"" (
     private async Task GenerateDiagram()
     {
         entities = new();
+        links = new();
         await Task.Delay(500);
         EntityManager.GenerateData(sqlScript);
         entities = EntityManager.Entities;
@@ -80,6 +81,7 @@ CREATE TABLE ""Episodes"" (
 
     private void StartDrag(MouseEventArgs args)
     {
+        Console.WriteLine("Start drag on canvas");
         isDraggingCanvas = true;
         prevX = args.ClientX;
         prevY = args.ClientY;

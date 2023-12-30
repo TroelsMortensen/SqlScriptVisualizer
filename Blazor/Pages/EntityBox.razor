@@ -7,13 +7,19 @@
 
 <div style="top: @Y;left: @X; width: @(Constants.EntityBoxWidth + "px"); "
      class="entity-box">
-    <h5 class="entity-header"
-        @onmousedown="StartDrag"
-        @onmouseup="StopDrag"
-        @onmouseleave="StopDrag"
-        @onmousemove="DragEntity">
-        @Evm.Entity.Name
-    </h5>
+    <div 
+        @onclick:stopPropagation="true" 
+        @onclick:preventDefault="true"
+        @onmousedown:stopPropagation="true"
+        @onmousedown:preventDefault="true">
+        <h5 class="entity-header"
+            @onmousedown="StartDrag"
+            @onmouseup="StopDrag"
+            @onmouseleave="StopDrag"
+            @onmousemove="DragEntity">
+            @Evm.Entity.Name
+        </h5>
+    </div>
     <table class="attribute-table">
         @foreach (Attribute attr in Evm.Entity.Attributes)
         {
@@ -30,9 +36,9 @@
 
 @code {
     [Parameter] public EntityViewModel Evm { get; set; } = null!;
-    
+
     [Parameter] public EventCallback OnRelease { get; set; }
-    
+
     private string X => Evm.X + "px";
     private string Y => Evm.Y + "px";
     private bool isDragging;
