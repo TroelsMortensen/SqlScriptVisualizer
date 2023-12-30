@@ -15,8 +15,11 @@ but leave the creation of indices, and inserting seed data. It may not work corr
 Copy/paste the script into the text area in the web page, click the button, and see the diagram generated on the right.\
 You can drag individual entities around by dragging the entity header. You can drag the entire diagram, by grabbing the canvas.
 
+
 ### Test data
-As an example, below are two SQLite scripts, which you can try out:
+As an example, below are two SQLite scripts, which you can try out.
+
+This simple 2-table script.
 
 ```sql
 CREATE TABLE "TvShows" (
@@ -35,6 +38,8 @@ CREATE TABLE "Episodes" (
     CONSTRAINT "FK_Episodes_TvShows_TvShowId" FOREIGN KEY ("TvShowId") REFERENCES "TvShows" ("Id") ON DELETE CASCADE
 );
 ```
+
+Or a slightly more elaborate 7-table script:
 
 ```sql
 CREATE TABLE "Author" (
@@ -99,3 +104,16 @@ CREATE TABLE "BookCategory" (
 
 * Can now drag entire diagram, by grabbing the checkered background.
 * Diagram is now shown, seemingly correctly.
+
+
+#### Note about GitHub pages deployment
+
+Hosting on GitHub pages was setup using [this source](https://swimburger.net/blog/dotnet/how-to-deploy-aspnet-blazor-webassembly-to-github-pages).
+
+Together with this:
+
+"
+I had the same issue after creating another template from a working project. To fix it I had to change Workflow permission through Repo -> Settings -> Actions -> General Set: Read and write permissions Check: Allow Github Actions to create and approve pull requests
+"
+
+From [here](https://github.com/actions/checkout/issues/417), the comment from bhismafarhan.
