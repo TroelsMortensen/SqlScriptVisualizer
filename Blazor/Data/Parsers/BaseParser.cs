@@ -7,8 +7,8 @@ namespace Blazor.Data.Parsers;
 public abstract class BaseParser : ISqlParser
 {
     private bool isInTable = false;
-    List<Entity> result = new();
-    Entity entity = null!;
+    private List<Entity> result = new();
+    private Entity entity = null!;
 
     public List<Entity> SqlScriptToEntities(string sql)
     {
