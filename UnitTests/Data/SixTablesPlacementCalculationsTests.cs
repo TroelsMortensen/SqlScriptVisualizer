@@ -1,5 +1,6 @@
 ﻿using Blazor.Data;
 using Blazor.Data.Models;
+using Blazor.Data.Parsers;
 
 namespace UnitTests.Data;
 

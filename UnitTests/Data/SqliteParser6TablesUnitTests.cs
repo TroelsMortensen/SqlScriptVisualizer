@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Blazor.Data;
 using Blazor.Data.Models;
+using Blazor.Data.Parsers;
 using Attribute = Blazor.Data.Models.Attribute;
 
 namespace UnitTests.Data;

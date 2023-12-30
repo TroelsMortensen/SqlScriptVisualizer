@@ -1,11 +1,10 @@
-﻿using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Blazor.Data.Models;
 using Attribute = Blazor.Data.Models.Attribute;
 
-namespace Blazor.Data;
+namespace Blazor.Data.Parsers;
 
-public partial class SqliteParser
+public class SqliteParser
 {
     private bool isInTable = false;
     List<Entity> result = new();
