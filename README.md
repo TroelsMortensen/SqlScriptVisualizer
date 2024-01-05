@@ -107,6 +107,18 @@ CREATE TABLE "BookCategory" (
 * Can now drag entire diagram, by grabbing the checkered background.
 * Diagram is now shown, seemingly correctly.
 
+## Roadmap
+
+In no particular order..
+
+* Show on delete behaviour
+* Show nullability
+* Other SQL dialects
+    * PostgreSQL
+* Fix the entity dragging issue
+* Select and drag multiple entities
+* Show attribute types
+* Show multiplicities. I may not be able to extract this from just the script. Not sure I can distinguish 1:1 and 1:*.
 
 #### Note about GitHub pages deployment
 
@@ -119,3 +131,5 @@ I had the same issue after creating another template from a working project. To 
 "
 
 From [here](https://github.com/actions/checkout/issues/417), the comment from bhismafarhan.
+
+
