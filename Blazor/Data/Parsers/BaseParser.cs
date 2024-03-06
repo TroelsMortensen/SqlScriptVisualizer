@@ -13,7 +13,7 @@ public abstract class BaseParser : ISqlParser
     public List<Entity> SqlScriptToEntities(string sql)
     {
         ResetState();
-        string[] strings = sql.Split("\n");
+        var strings = GetScriptLines(sql);
         foreach (var line in strings)
         {
             HandleEndOfTable(line);
@@ -28,6 +28,20 @@ public abstract class BaseParser : ISqlParser
         }
 
         return result;
+    }
+
+    private static List<string> GetScriptLines(string sql)
+    {
+        var strings = sql.Split("\n")
+            .Select(x => x
+                .TrimStart()
+                .TrimEnd()
+                .Replace("\r", ""))
+            .ToList();
+        strings.RemoveAll(x => x.Equals("\r"));
+        strings.RemoveAll(x => x.Equals(""));
+        
+        return strings;
     }
 
     private void ResetState()
