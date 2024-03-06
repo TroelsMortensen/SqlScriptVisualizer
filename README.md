@@ -14,6 +14,12 @@ You can use the following CLI command to generate the SQL script, which would cr
 This command will output the script to the console. Copy "most of it", i.e. the create table statements, 
 but leave the creation of indices, and inserting seed data. It may not work correctly, if these statements are included. I haven't tested properly.
 
+**Update**\
+The above command will output to the terminal, which will sometimes contain irregular line breaks, which the tool cannot handle.\
+You can output the script to a file instead, which will have correct line breaks:
+
+`dotnet ef dbcontext script > output.txt`
+
 Copy/paste the script into the text area in the web page, click the button, and see the diagram generated on the right.\
 You can drag individual entities around by dragging the entity header. You can drag the entire diagram, by grabbing the canvas.
 
