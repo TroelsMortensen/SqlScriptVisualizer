@@ -125,6 +125,7 @@ In no particular order..
 * Select and drag multiple entities
 * Show attribute types
 * Show multiplicities. I may not be able to extract this from just the script. Not sure I can distinguish 1:1 and 1:*.
+* Better exception handling. Now the page just crashes.
 
 #### Note about GitHub pages deployment
 
